@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package models;
+
+service Chord {
+
+    rpc GetPredecessor(Error) returns (Node);
+
+    rpc SetPredecessor(Node) returns (Error);
+
+    rpc CheckPredecessor(ID) returns (Error);
+
+    rpc GetSuccessor(Error) returns (Node);
+
+    rpc SetSuccessor(Node) returns (Error);
+
+    rpc FindSuccessor(ID) returns(Node);
+
+    rpc Notift(Node) returns (Error);
+
+    rpc GetResource(GetRequest) returns (GETRes);
+
+    rpc SetResource();
+
+    rpc DeleteResource();
+
+    rpc
+
+    rpc 
+
+}
+
+// Node cotains ID and address
+message Node {
+
+    bytes id = 1;
+    string addr = 2;
+}
+
+message Error {}
+
+message ID {
+    bytes id = 1;
+}
+
+/* 
+    Resource operations message bodies.
+*/
+message GetRequest{ 
+    string key = 1;  
+}
+
+message GetResponse{
+    bytes value = 1;
+}
+
+
+message SetRequest{
+
+    string key = 1;
+    string value = 2;
+}
+
+message SetResponse{
+
+}
+
+
