@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -8,13 +9,25 @@ import (
 type MemoryStorage struct {
 	Storage
 
-	resources map[string]WebResources
-	mux       *sync.RWMutex
+	Resources map[string]WebResource
+	mutex     *sync.RWMutex
+}
+
+//NewMemoryStorage creates a MemoryStorage prepared
+func NewMemoryStorage() *MemoryStorage {
+	return &MemoryStorage{
+		Resources: make(map[string]WebResource),
+	}
 }
 
 //Get retrieves the web resource using its uri address
 func (m *MemoryStorage) Get(key string) ([]byte, error) {
 
+	for uri, wb := range m.Resources {
+		if key == uri {
+			return wb.Content, nil
+		}
+	}
 	return nil, nil
 }
 
@@ -27,5 +40,11 @@ func (m *MemoryStorage) Save(key string, content []byte) error {
 //Delete removes the web resource along with its uri address from the memory store
 func (m *MemoryStorage) Delete(key string) error {
 
-	return nil
+	for uri := range m.Resources {
+		if uri == key {
+			delete(m.Resources, uri)
+			return nil
+		}
+	}
+	return fmt.Errorf("No web resource with the specified URI found")
 }

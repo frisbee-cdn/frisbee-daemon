@@ -1,7 +1,11 @@
 package storage
 
-//
+import (
+	"time"
+)
+
+//WebResource defines the prepresentation of a web resource
 type WebResource struct {
-	content []byte
-	expiry
+	Content []byte
+	Expiry  time.Time
 }
