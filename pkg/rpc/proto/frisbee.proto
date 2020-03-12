@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package models;
 
-service Chord {
+service Frisbee {
 
     rpc GetPredecessor(Error) returns (Node);
 
