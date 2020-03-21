@@ -4,17 +4,7 @@ package models;
 
 service Frisbee {
 
-    rpc GetPredecessor(Error) returns (Node);
-
-    rpc SetPredecessor(Node) returns (Error);
-
-    rpc CheckPredecessor(ID) returns (Error);
-
-    rpc GetSuccessor(Error) returns (Node);
-
-    rpc SetSuccessor(Node) returns (Error);
-
-    rpc FindSuccessor(ID) returns(Node);
+    rpc Ping() returns (Error);
 
     rpc Notift(Node) returns (Error);
 

@@ -1,14 +1,24 @@
 package peer
 
+import (
+	"container/list"
+	"github/frisbee-cdn/frisbee-daemon/pkg/util"
+)
+
 // KBucket is a list of routing addresses of other nodes in
 // the network.
 type KBucket struct {
-	IP     string
-	Port   string
-	NodeID string
+	*list.List
 }
 
 // NewBucket is used to create an empty KBucket
 func NewBucket() *KBucket {
-	return nil
+	return &KBucket{
+		list.New(),
+	}
+}
+
+func (kb *KBucket) isFull() bool {
+
+	return kb.Len() >= util.BUCKETSIZE
 }

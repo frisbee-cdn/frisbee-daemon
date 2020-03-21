@@ -1,32 +1,41 @@
 package peer
 
 import (
-	cfg "github/frisbee-cdn/frisbee-daemon/internal"
-	trans "github/frisbee-cdn/frisbee-daemon/pkg/rpc"
+	"fmt"
+	"github/frisbee-cdn/frisbee-daemon/internal"
+	"github/frisbee-cdn/frisbee-daemon/pkg/rpc"
 	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
+	"github/frisbee-cdn/frisbee-daemon/pkg/util"
 )
 
 // Node represents the node inside our network.
 type Node struct {
 	*model.Node
 
-	Config    *cfg.Configuration
-	Transport trans.Transport
+	Config    *internal.Configuration
+	Transport rpc.Transport
 }
 
-// InitNode creates a new node in the newtork
-func InitNode() {
+// BootStrap creates a new node in the newtork
+func BootStrap(config *internal.Configuration) *Node {
 
+	node, err := newNode(config)
+	if err != nil {
+		panic(fmt.Errorf("Node startup failed"))
+	}
+
+	return node
 }
 
-func newNode(config *cfg.Configuration) (*Node, error) {
+func newNode(config *internal.Configuration) (*Node, error) {
 
 	node := &Node{
 		Node:   new(model.Node),
 		Config: config,
 	}
 
-	id, err := HashKey(config.Server.Addr)
+	// Hash IP Address and create Identifier
+	id, err := util.HashKey(config.Server.Addr)
 	if err != nil {
 		return nil, err
 	}
@@ -36,15 +45,27 @@ func newNode(config *cfg.Configuration) (*Node, error) {
 	return node, nil
 }
 
-func (p *Node) join() error {
+func (n *Node) join() error {
 	return nil
 }
 
-func (p *Node) leave() error {
+func (n *Node) leave() error {
 
 	return nil
 }
 
-func (p *Node) stabilize() {
+func (n *Node) stabilize() {
+
+}
+
+func (n *Node) findCloserNode() {
+
+}
+
+func findNode() {
+
+}
+
+func discoverPeer() {
 
 }
