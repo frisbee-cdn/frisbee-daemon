@@ -27,7 +27,8 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 // Node cotains ID and address
 type Node struct {
 	Id                   []byte   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Addr                 string   `protobuf:"bytes,2,opt,name=addr,proto3" json:"addr,omitempty"`
+	Port                 uint32   `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	Addr                 string   `protobuf:"bytes,3,opt,name=addr,proto3" json:"addr,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -63,6 +64,13 @@ func (m *Node) GetId() []byte {
 		return m.Id
 	}
 	return nil
+}
+
+func (m *Node) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
 }
 
 func (m *Node) GetAddr() string {
@@ -142,272 +150,112 @@ func (m *ID) GetId() []byte {
 	return nil
 }
 
-//
-//Resource operations message bodies.
-type GetRequest struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+type CheckStatusRequest struct {
+	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetRequest) Reset()         { *m = GetRequest{} }
-func (m *GetRequest) String() string { return proto.CompactTextString(m) }
-func (*GetRequest) ProtoMessage()    {}
-func (*GetRequest) Descriptor() ([]byte, []int) {
+func (m *CheckStatusRequest) Reset()         { *m = CheckStatusRequest{} }
+func (m *CheckStatusRequest) String() string { return proto.CompactTextString(m) }
+func (*CheckStatusRequest) ProtoMessage()    {}
+func (*CheckStatusRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ede8bc4112172419, []int{3}
 }
 
-func (m *GetRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
+func (m *CheckStatusRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CheckStatusRequest.Unmarshal(m, b)
 }
-func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
+func (m *CheckStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CheckStatusRequest.Marshal(b, m, deterministic)
 }
-func (m *GetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetRequest.Merge(m, src)
+func (m *CheckStatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckStatusRequest.Merge(m, src)
 }
-func (m *GetRequest) XXX_Size() int {
-	return xxx_messageInfo_GetRequest.Size(m)
+func (m *CheckStatusRequest) XXX_Size() int {
+	return xxx_messageInfo_CheckStatusRequest.Size(m)
 }
-func (m *GetRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetRequest.DiscardUnknown(m)
+func (m *CheckStatusRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckStatusRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetRequest proto.InternalMessageInfo
+var xxx_messageInfo_CheckStatusRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetKey() string {
+func (m *CheckStatusRequest) GetMessage() string {
 	if m != nil {
-		return m.Key
+		return m.Message
 	}
 	return ""
 }
 
-type GetResponse struct {
-	Value                []byte   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+type CheckStatusReply struct {
+	Status               string   `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetResponse) Reset()         { *m = GetResponse{} }
-func (m *GetResponse) String() string { return proto.CompactTextString(m) }
-func (*GetResponse) ProtoMessage()    {}
-func (*GetResponse) Descriptor() ([]byte, []int) {
+func (m *CheckStatusReply) Reset()         { *m = CheckStatusReply{} }
+func (m *CheckStatusReply) String() string { return proto.CompactTextString(m) }
+func (*CheckStatusReply) ProtoMessage()    {}
+func (*CheckStatusReply) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ede8bc4112172419, []int{4}
 }
 
-func (m *GetResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
+func (m *CheckStatusReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CheckStatusReply.Unmarshal(m, b)
 }
-func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
+func (m *CheckStatusReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CheckStatusReply.Marshal(b, m, deterministic)
 }
-func (m *GetResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetResponse.Merge(m, src)
+func (m *CheckStatusReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckStatusReply.Merge(m, src)
 }
-func (m *GetResponse) XXX_Size() int {
-	return xxx_messageInfo_GetResponse.Size(m)
+func (m *CheckStatusReply) XXX_Size() int {
+	return xxx_messageInfo_CheckStatusReply.Size(m)
 }
-func (m *GetResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetResponse.DiscardUnknown(m)
+func (m *CheckStatusReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckStatusReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+var xxx_messageInfo_CheckStatusReply proto.InternalMessageInfo
 
-func (m *GetResponse) GetValue() []byte {
+func (m *CheckStatusReply) GetStatus() string {
 	if m != nil {
-		return m.Value
-	}
-	return nil
-}
-
-type SetRequest struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *SetRequest) Reset()         { *m = SetRequest{} }
-func (m *SetRequest) String() string { return proto.CompactTextString(m) }
-func (*SetRequest) ProtoMessage()    {}
-func (*SetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{5}
-}
-
-func (m *SetRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SetRequest.Unmarshal(m, b)
-}
-func (m *SetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SetRequest.Marshal(b, m, deterministic)
-}
-func (m *SetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetRequest.Merge(m, src)
-}
-func (m *SetRequest) XXX_Size() int {
-	return xxx_messageInfo_SetRequest.Size(m)
-}
-func (m *SetRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_SetRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SetRequest proto.InternalMessageInfo
-
-func (m *SetRequest) GetKey() string {
-	if m != nil {
-		return m.Key
+		return m.Status
 	}
 	return ""
 }
-
-func (m *SetRequest) GetValue() string {
-	if m != nil {
-		return m.Value
-	}
-	return ""
-}
-
-type SetResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *SetResponse) Reset()         { *m = SetResponse{} }
-func (m *SetResponse) String() string { return proto.CompactTextString(m) }
-func (*SetResponse) ProtoMessage()    {}
-func (*SetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{6}
-}
-
-func (m *SetResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SetResponse.Unmarshal(m, b)
-}
-func (m *SetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SetResponse.Marshal(b, m, deterministic)
-}
-func (m *SetResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetResponse.Merge(m, src)
-}
-func (m *SetResponse) XXX_Size() int {
-	return xxx_messageInfo_SetResponse.Size(m)
-}
-func (m *SetResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_SetResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SetResponse proto.InternalMessageInfo
-
-type DeleteRequest struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
-func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
-func (*DeleteRequest) ProtoMessage()    {}
-func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{7}
-}
-
-func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
-}
-func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
-}
-func (m *DeleteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteRequest.Merge(m, src)
-}
-func (m *DeleteRequest) XXX_Size() int {
-	return xxx_messageInfo_DeleteRequest.Size(m)
-}
-func (m *DeleteRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
-
-func (m *DeleteRequest) GetKey() string {
-	if m != nil {
-		return m.Key
-	}
-	return ""
-}
-
-type DeleteResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteResponse) Reset()         { *m = DeleteResponse{} }
-func (m *DeleteResponse) String() string { return proto.CompactTextString(m) }
-func (*DeleteResponse) ProtoMessage()    {}
-func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{8}
-}
-
-func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteResponse.Unmarshal(m, b)
-}
-func (m *DeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteResponse.Marshal(b, m, deterministic)
-}
-func (m *DeleteResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteResponse.Merge(m, src)
-}
-func (m *DeleteResponse) XXX_Size() int {
-	return xxx_messageInfo_DeleteResponse.Size(m)
-}
-func (m *DeleteResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*Node)(nil), "models.Node")
 	proto.RegisterType((*Error)(nil), "models.Error")
 	proto.RegisterType((*ID)(nil), "models.ID")
-	proto.RegisterType((*GetRequest)(nil), "models.GetRequest")
-	proto.RegisterType((*GetResponse)(nil), "models.GetResponse")
-	proto.RegisterType((*SetRequest)(nil), "models.SetRequest")
-	proto.RegisterType((*SetResponse)(nil), "models.SetResponse")
-	proto.RegisterType((*DeleteRequest)(nil), "models.DeleteRequest")
-	proto.RegisterType((*DeleteResponse)(nil), "models.DeleteResponse")
+	proto.RegisterType((*CheckStatusRequest)(nil), "models.CheckStatusRequest")
+	proto.RegisterType((*CheckStatusReply)(nil), "models.CheckStatusReply")
 }
 
-func init() { proto.RegisterFile("frisbee.proto", fileDescriptor_ede8bc4112172419) }
+func init() {
+	proto.RegisterFile("frisbee.proto", fileDescriptor_ede8bc4112172419)
+}
 
 var fileDescriptor_ede8bc4112172419 = []byte{
-	// 348 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x5f, 0x4f, 0xf2, 0x30,
-	0x14, 0xc6, 0xc3, 0xf8, 0x17, 0x0e, 0xdb, 0x42, 0xfa, 0xf2, 0x1a, 0xb2, 0x0b, 0x83, 0x35, 0x26,
-	0x28, 0x81, 0x0b, 0x35, 0xdc, 0x7a, 0x21, 0x42, 0xb8, 0x21, 0x66, 0xfb, 0x04, 0xb0, 0x1e, 0xe2,
-	0x02, 0x52, 0x6c, 0x3b, 0x13, 0x3f, 0xb7, 0x5f, 0xc0, 0xb8, 0xd2, 0x6c, 0x5d, 0x94, 0x78, 0xd7,
-	0xf6, 0x3c, 0xbf, 0x27, 0x4f, 0xce, 0x39, 0x05, 0x6f, 0x23, 0x12, 0xb9, 0x46, 0x1c, 0x1f, 0x04,
-	0x57, 0x9c, 0x34, 0x5e, 0x39, 0xc3, 0x9d, 0xa4, 0x37, 0x50, 0x5b, 0x72, 0x86, 0xc4, 0x07, 0x27,
-	0x61, 0xbd, 0x4a, 0xbf, 0x32, 0x70, 0x43, 0x27, 0x61, 0x84, 0x40, 0x6d, 0xc5, 0x98, 0xe8, 0x39,
-	0xfd, 0xca, 0xa0, 0x15, 0x66, 0x67, 0xda, 0x84, 0xfa, 0x93, 0x10, 0x5c, 0xd0, 0x2e, 0x38, 0x8b,
-	0x69, 0x19, 0xa1, 0xe7, 0x00, 0x73, 0x54, 0x21, 0xbe, 0xa5, 0x28, 0x15, 0xe9, 0x40, 0x75, 0x8b,
-	0x1f, 0x59, 0xb9, 0x15, 0x7e, 0x1f, 0xe9, 0x25, 0xb4, 0xb3, 0xba, 0x3c, 0xf0, 0xbd, 0x44, 0xd2,
-	0x85, 0xfa, 0xfb, 0x6a, 0x97, 0xe2, 0xd1, 0x41, 0x5f, 0xe8, 0x3d, 0x40, 0x74, 0xc2, 0x24, 0xa7,
-	0x74, 0xb0, 0x23, 0xe5, 0x41, 0x3b, 0xca, 0xad, 0xe9, 0x05, 0x78, 0x53, 0xdc, 0xa1, 0xc2, 0xdf,
-	0xc3, 0x74, 0xc0, 0x37, 0x12, 0x0d, 0xdd, 0x7e, 0x56, 0xa1, 0x39, 0xd3, 0x3d, 0x22, 0x23, 0xf0,
-	0xe7, 0xa8, 0x9e, 0x05, 0x32, 0x8c, 0x51, 0x4a, 0x2e, 0x88, 0x37, 0xd6, 0x0d, 0x1b, 0x67, 0x1d,
-	0x08, 0x5c, 0x73, 0xcd, 0x9a, 0x37, 0x02, 0x3f, 0xb2, 0xe5, 0x56, 0x3d, 0xb0, 0x61, 0x32, 0x82,
-	0xce, 0xe3, 0x0b, 0xc6, 0xdb, 0x22, 0x00, 0x46, 0xb2, 0x98, 0x96, 0xe5, 0x43, 0x70, 0xe7, 0xa8,
-	0xa2, 0x34, 0xfe, 0x4b, 0x94, 0x21, 0xb8, 0x51, 0x51, 0x7c, 0x32, 0xc8, 0x35, 0x78, 0xb3, 0x64,
-	0xcf, 0x72, 0x75, 0x31, 0x85, 0xed, 0x7b, 0x05, 0x8d, 0x25, 0x57, 0xc9, 0x46, 0x9d, 0x76, 0x9c,
-	0x98, 0x19, 0xf3, 0x54, 0xc4, 0x48, 0x88, 0xa9, 0xe6, 0x8b, 0x11, 0xfc, 0xb3, 0xde, 0x8e, 0xcb,
-	0x30, 0x31, 0x03, 0x2c, 0x71, 0xd1, 0x0f, 0x5c, 0x61, 0xd2, 0xe4, 0xa1, 0x30, 0x46, 0x8d, 0xfe,
-	0x37, 0x32, 0x6b, 0x03, 0x82, 0xb3, 0xf2, 0xb3, 0x36, 0x58, 0x37, 0xb2, 0xef, 0x70, 0xf7, 0x15,
-	0x00, 0x00, 0xff, 0xff, 0xb6, 0x97, 0xf0, 0x9b, 0x1f, 0x03, 0x00, 0x00,
+	// 215 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0x4d, 0x4b, 0xc4, 0x30,
+	0x10, 0x86, 0x4d, 0xac, 0x2d, 0x3b, 0xb8, 0x22, 0x83, 0x48, 0xd8, 0x53, 0xc9, 0xa9, 0x78, 0xc8,
+	0x41, 0xef, 0x7b, 0xf1, 0x03, 0xf6, 0x22, 0x12, 0x7f, 0x41, 0xd7, 0x8c, 0x35, 0xd8, 0x9a, 0x98,
+	0xa4, 0x87, 0xfe, 0x7b, 0x31, 0xad, 0x07, 0x75, 0x6f, 0xef, 0x93, 0x3c, 0xcc, 0xf0, 0x0e, 0xac,
+	0x5f, 0x83, 0x8d, 0x7b, 0x22, 0xe5, 0x83, 0x4b, 0x0e, 0xcb, 0xc1, 0x19, 0xea, 0xa3, 0xdc, 0x42,
+	0xf1, 0xe8, 0x0c, 0xe1, 0x19, 0x70, 0x6b, 0x04, 0xab, 0x59, 0x73, 0xaa, 0xb9, 0x35, 0x88, 0x50,
+	0x78, 0x17, 0x92, 0xe0, 0x35, 0x6b, 0xd6, 0x3a, 0xe7, 0xef, 0xb7, 0xd6, 0x98, 0x20, 0x8e, 0x6b,
+	0xd6, 0xac, 0x74, 0xce, 0xb2, 0x82, 0x93, 0xfb, 0x10, 0x5c, 0x90, 0x17, 0xc0, 0x77, 0x77, 0x7f,
+	0xc7, 0x48, 0x05, 0x78, 0xfb, 0x46, 0x2f, 0xef, 0xcf, 0xa9, 0x4d, 0x63, 0xd4, 0xf4, 0x39, 0x52,
+	0x4c, 0x28, 0xa0, 0x1a, 0x28, 0xc6, 0xb6, 0xa3, 0xac, 0xae, 0xf4, 0x0f, 0xca, 0x2b, 0x38, 0xff,
+	0xe5, 0xfb, 0x7e, 0xc2, 0x4b, 0x28, 0x63, 0xc6, 0x45, 0x5e, 0xe8, 0x7a, 0x07, 0xd5, 0xc3, 0xdc,
+	0x09, 0xb7, 0x50, 0x3c, 0xd9, 0x8f, 0x0e, 0x37, 0x6a, 0xae, 0xa5, 0xfe, 0x2f, 0xdd, 0x88, 0x83,
+	0x7f, 0xbe, 0x9f, 0xe4, 0xd1, 0xbe, 0xcc, 0x47, 0xb9, 0xf9, 0x0a, 0x00, 0x00, 0xff, 0xff, 0x0d,
+	0x91, 0xc3, 0x0a, 0x25, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -422,16 +270,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type FrisbeeClient interface {
-	GetPredecessor(ctx context.Context, in *Error, opts ...grpc.CallOption) (*Node, error)
-	SetPredecessor(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error)
-	CheckPredecessor(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Error, error)
-	GetSuccessor(ctx context.Context, in *Error, opts ...grpc.CallOption) (*Node, error)
-	SetSuccessor(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error)
-	FindSuccessor(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Node, error)
-	Notift(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error)
-	GetResource(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	SetResource(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
-	DeleteResource(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Ping(ctx context.Context, in *CheckStatusRequest, opts ...grpc.CallOption) (*CheckStatusReply, error)
 }
 
 type frisbeeClient struct {
@@ -442,90 +281,9 @@ func NewFrisbeeClient(cc grpc.ClientConnInterface) FrisbeeClient {
 	return &frisbeeClient{cc}
 }
 
-func (c *frisbeeClient) GetPredecessor(ctx context.Context, in *Error, opts ...grpc.CallOption) (*Node, error) {
-	out := new(Node)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/GetPredecessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) SetPredecessor(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error) {
-	out := new(Error)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/SetPredecessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) CheckPredecessor(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Error, error) {
-	out := new(Error)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/CheckPredecessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) GetSuccessor(ctx context.Context, in *Error, opts ...grpc.CallOption) (*Node, error) {
-	out := new(Node)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/GetSuccessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) SetSuccessor(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error) {
-	out := new(Error)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/SetSuccessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) FindSuccessor(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Node, error) {
-	out := new(Node)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/FindSuccessor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) Notift(ctx context.Context, in *Node, opts ...grpc.CallOption) (*Error, error) {
-	out := new(Error)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/Notift", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) GetResource(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/GetResource", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) SetResource(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error) {
-	out := new(SetResponse)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/SetResource", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *frisbeeClient) DeleteResource(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/DeleteResource", in, out, opts...)
+func (c *frisbeeClient) Ping(ctx context.Context, in *CheckStatusRequest, opts ...grpc.CallOption) (*CheckStatusReply, error) {
+	out := new(CheckStatusReply)
+	err := c.cc.Invoke(ctx, "/models.Frisbee/Ping", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -534,233 +292,35 @@ func (c *frisbeeClient) DeleteResource(ctx context.Context, in *DeleteRequest, o
 
 // FrisbeeServer is the server API for Frisbee service.
 type FrisbeeServer interface {
-	GetPredecessor(context.Context, *Error) (*Node, error)
-	SetPredecessor(context.Context, *Node) (*Error, error)
-	CheckPredecessor(context.Context, *ID) (*Error, error)
-	GetSuccessor(context.Context, *Error) (*Node, error)
-	SetSuccessor(context.Context, *Node) (*Error, error)
-	FindSuccessor(context.Context, *ID) (*Node, error)
-	Notift(context.Context, *Node) (*Error, error)
-	GetResource(context.Context, *GetRequest) (*GetResponse, error)
-	SetResource(context.Context, *SetRequest) (*SetResponse, error)
-	DeleteResource(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	Ping(context.Context, *CheckStatusRequest) (*CheckStatusReply, error)
 }
 
 // UnimplementedFrisbeeServer can be embedded to have forward compatible implementations.
 type UnimplementedFrisbeeServer struct {
 }
 
-func (*UnimplementedFrisbeeServer) GetPredecessor(ctx context.Context, req *Error) (*Node, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPredecessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) SetPredecessor(ctx context.Context, req *Node) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetPredecessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) CheckPredecessor(ctx context.Context, req *ID) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckPredecessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) GetSuccessor(ctx context.Context, req *Error) (*Node, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSuccessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) SetSuccessor(ctx context.Context, req *Node) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetSuccessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) FindSuccessor(ctx context.Context, req *ID) (*Node, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindSuccessor not implemented")
-}
-func (*UnimplementedFrisbeeServer) Notift(ctx context.Context, req *Node) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Notift not implemented")
-}
-func (*UnimplementedFrisbeeServer) GetResource(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetResource not implemented")
-}
-func (*UnimplementedFrisbeeServer) SetResource(ctx context.Context, req *SetRequest) (*SetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetResource not implemented")
-}
-func (*UnimplementedFrisbeeServer) DeleteResource(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteResource not implemented")
+func (*UnimplementedFrisbeeServer) Ping(ctx context.Context, req *CheckStatusRequest) (*CheckStatusReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
 
 func RegisterFrisbeeServer(s *grpc.Server, srv FrisbeeServer) {
 	s.RegisterService(&_Frisbee_serviceDesc, srv)
 }
 
-func _Frisbee_GetPredecessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Error)
+func _Frisbee_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckStatusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FrisbeeServer).GetPredecessor(ctx, in)
+		return srv.(FrisbeeServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/models.Frisbee/GetPredecessor",
+		FullMethod: "/models.Frisbee/Ping",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).GetPredecessor(ctx, req.(*Error))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_SetPredecessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Node)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).SetPredecessor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/SetPredecessor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).SetPredecessor(ctx, req.(*Node))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_CheckPredecessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).CheckPredecessor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/CheckPredecessor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).CheckPredecessor(ctx, req.(*ID))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_GetSuccessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Error)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).GetSuccessor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/GetSuccessor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).GetSuccessor(ctx, req.(*Error))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_SetSuccessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Node)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).SetSuccessor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/SetSuccessor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).SetSuccessor(ctx, req.(*Node))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_FindSuccessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).FindSuccessor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/FindSuccessor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).FindSuccessor(ctx, req.(*ID))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_Notift_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Node)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).Notift(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/Notift",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).Notift(ctx, req.(*Node))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_GetResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).GetResource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/GetResource",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).GetResource(ctx, req.(*GetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_SetResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).SetResource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/SetResource",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).SetResource(ctx, req.(*SetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Frisbee_DeleteResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FrisbeeServer).DeleteResource(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/models.Frisbee/DeleteResource",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).DeleteResource(ctx, req.(*DeleteRequest))
+		return srv.(FrisbeeServer).Ping(ctx, req.(*CheckStatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -770,44 +330,8 @@ var _Frisbee_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*FrisbeeServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetPredecessor",
-			Handler:    _Frisbee_GetPredecessor_Handler,
-		},
-		{
-			MethodName: "SetPredecessor",
-			Handler:    _Frisbee_SetPredecessor_Handler,
-		},
-		{
-			MethodName: "CheckPredecessor",
-			Handler:    _Frisbee_CheckPredecessor_Handler,
-		},
-		{
-			MethodName: "GetSuccessor",
-			Handler:    _Frisbee_GetSuccessor_Handler,
-		},
-		{
-			MethodName: "SetSuccessor",
-			Handler:    _Frisbee_SetSuccessor_Handler,
-		},
-		{
-			MethodName: "FindSuccessor",
-			Handler:    _Frisbee_FindSuccessor_Handler,
-		},
-		{
-			MethodName: "Notift",
-			Handler:    _Frisbee_Notift_Handler,
-		},
-		{
-			MethodName: "GetResource",
-			Handler:    _Frisbee_GetResource_Handler,
-		},
-		{
-			MethodName: "SetResource",
-			Handler:    _Frisbee_SetResource_Handler,
-		},
-		{
-			MethodName: "DeleteResource",
-			Handler:    _Frisbee_DeleteResource_Handler,
+			MethodName: "Ping",
+			Handler:    _Frisbee_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

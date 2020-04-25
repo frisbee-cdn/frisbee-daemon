@@ -14,3 +14,10 @@
 
 # Test binary
 *.test
+
+# Config
+*.yml
+.env
+
+# Proto
+*.pb.go

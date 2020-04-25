@@ -20,7 +20,7 @@ type Configuration struct {
 // ServerConfiguration store server configuration details
 type ServerConfiguration struct {
 	Addr string
-	Port int
+	Port uint32
 }
 
 func readConfig(filename string, defaults map[string]interface{}) (*viper.Viper, error) {

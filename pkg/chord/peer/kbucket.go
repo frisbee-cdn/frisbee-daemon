@@ -18,7 +18,14 @@ func NewBucket() *KBucket {
 	}
 }
 
+//Add
+func (kb *KBucket) Add(node Node){
+
+	kb.PushBack(node)
+
+}
+
 func (kb *KBucket) isFull() bool {
 
-	return kb.Len() >= util.BUCKETSIZE
+	return kb.Len() >= util.IDLENGTH
 }
