@@ -1,4 +1,4 @@
-package util
+package kademlia
 
 // IDLENGTH defined max length of KBuckets
 const (

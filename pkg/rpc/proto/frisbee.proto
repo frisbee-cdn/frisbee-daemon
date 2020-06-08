@@ -6,6 +6,11 @@ service Frisbee {
 
     rpc Ping(CheckStatusRequest) returns (CheckStatusReply) {};
 
+    rpc Store() returns (){};
+
+    rpc FindNode() returns () {};
+
+    rpc FindValue() returns() {};
 
 }
 
