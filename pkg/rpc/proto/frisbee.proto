@@ -6,11 +6,11 @@ service Frisbee {
 
     rpc Ping(CheckStatusRequest) returns (CheckStatusReply) {};
 
-    rpc Store() returns (){};
+    rpc Store(StoreRequest) returns (Error){};
 
-    rpc FindNode() returns () {};
+    rpc FindNode(ID) returns (NodeResponse) {};
 
-    rpc FindValue() returns() {};
+    rpc FindValue(ID) returns (StorageResponse) {};
 
 }
 
@@ -19,6 +19,10 @@ message Node {
     bytes id = 1;
     uint32 port = 2;
     string addr = 3;
+}
+
+message NodeResponse {
+    repeated Node nodes = 1;
 }
 
 message Error {}
@@ -33,4 +37,13 @@ message CheckStatusRequest{
 
 message CheckStatusReply{
     string status = 1;
+}
+
+message StoreRequest {
+    string key = 1;
+    bytes content = 2;
+}
+
+message StorageResponse {
+    bytes content = 1;
 }

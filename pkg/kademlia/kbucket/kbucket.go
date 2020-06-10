@@ -2,13 +2,12 @@ package peer
 
 import (
 	"container/list"
-	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia"
 	"time"
 )
 
 
-// PeerInfo holds all related information for a peer in the K-Bucket
-type PeerInfo struct{
+// Contact holds all related information for a peer in the K-Bucket
+type Contact struct{
 
 	// Id of the peer
 	dhtId ID
@@ -36,12 +35,12 @@ func NewBucket() *KBucket {
 	}
 }
 
-func (kb *KBucket) GetAllPeers() []PeerInfo {
+func (kb *KBucket) GetAllPeers() []Contact {
 
-	var peers []PeerInfo
+	var peers []Contact
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next(){
-		p := elem.Value.(*PeerInfo)
+		p := elem.Value.(*Contact)
 		peers = append(peers, *p)
 	}
 	return peers
@@ -53,10 +52,10 @@ func (kb *KBucket) Update(id ID){
 
 	elem := kb.find(id)
 	if elem != nil{
-		kb.List.MoveToBack(elem)
+		//kb.List.MoveToBack(elem)
 	}else{
 		if !kb.isFull(){
-			kb.List.PushBack(&PeerInfo{})
+			kb.List.PushBack(&Contact{})
 		}else{
 			/* TODO: Ping the node from the front and see if it responds , if contact fails add the node to the tail
 			and drop the element from the front, element from the from is the oldest contact node in the k-bucket.
@@ -68,10 +67,10 @@ func (kb *KBucket) Update(id ID){
 
 // find returns the kbucket with the given Id if it exists
 // returns nil if the peerId does not exist in the kBucket
-func (kb *KBucket) find(id ID) *PeerInfo{
+func (kb *KBucket) find(id ID) *Contact {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next(){
-		if id.Equals(elem.Value.(*PeerInfo).dhtId) {
-			return elem.Value.(*PeerInfo)
+		if id.Equals(elem.Value.(*Contact).dhtId) {
+			return elem.Value.(*Contact)
 		}
 	}
 	return nil
@@ -82,7 +81,7 @@ func (kb *KBucket) find(id ID) *PeerInfo{
 func (kb *KBucket) remove(id ID) bool {
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next(){
-		if id.Equals(elem.Value.(*PeerInfo).dhtId){
+		if id.Equals(elem.Value.(*Contact).dhtId){
 			kb.List.Remove(elem)
 			return true
 		}
@@ -92,7 +91,8 @@ func (kb *KBucket) remove(id ID) bool {
 
 func (kb *KBucket) isFull() bool {
 
-	return kb.List.Len() >= kademlia.IDLENGTH
+	//return kb.List.Len() >= kademlia.IDLENGTH
+	return true
 }
 
 // Split splits a bucket peers into two buckets
@@ -105,7 +105,7 @@ func (kb *KBucket)Split(cpl int, target ID) * KBucket{
 
 	for elem != nil {
 
-		pId := elem.Value.(*PeerInfo).dhtId
+		pId := elem.Value.(*Contact).dhtId
 		peerCpl := CommonPrefixLen(pId, target)
 		if peerCpl > cpl {
 
@@ -126,7 +126,7 @@ func (kb *KBucket) maxCommonPrefix(target ID) uint{
 
 	maxCpl := uint(0)
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next(){
-		cpl := uint(CommonPrefixLen(elem.Value.(*PeerInfo).dhtId, target))
+		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).dhtId, target))
 		if cpl > maxCpl {
 			maxCpl = cpl
 		}

@@ -1,30 +1,30 @@
 package main
 
-import (
-	"fmt"
-	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia/kbucket"
-)
 
+import (
+
+	config "github/frisbee-cdn/frisbee-daemon/internal"
+	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia"
+)
 func main() {
 
-	//config := cfg.InitConfiguration("development")
+	cfg := config.InitConfiguration("development")
 
-	//node := kbucket.BootStrap(config)
-	//println(node.Peer.Id)
-	//println(node.Peer.Addr)
-	//println(node.Peer.Port)
+	node := kademlia.BootStrap(cfg)
+	println(node.Id)
+	println(node.Addr)
+	println(node.Port)
 
-	id1, _ := peer.HashKey("192")
-	id2, _ := peer.HashKey("192")
-
-	fmt.Printf("Haskeys: \n {%v} \n {%v}", id1, id2)
-
-	dist := peer.XOR(id1, id2)
-	fmt.Printf("\nDistance {%v}", dist)
-
-	leadingZeros := peer.ZeroPrefixLen([20]byte{1})
-
-	fmt.Printf("Peer: {%v}", leadingZeros)
-
+	//id1, _ := peer.HashKey("192")
+	//id2, _ := peer.HashKey("440")
+	//
+	//fmt.Printf("Haskeys: \n {%v} \n {%v}", id1, id2)
+	//
+	//dist := peer.XOR(id1, id2)
+	//fmt.Printf("\nDistance {%v}", dist)
+	//
+	//leadingZeros := peer.ZeroPrefixLen(dist)
+	//
+	//fmt.Printf("Peer: {%v}", leadingZeros)
 
 }

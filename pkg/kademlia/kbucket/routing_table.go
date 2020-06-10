@@ -1,7 +1,6 @@
 package peer
 
 import (
-	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia"
 	"time"
 )
 
@@ -38,7 +37,7 @@ func NewRoutingTable(bucketsize int, local ID, latency time.Duration) (*RoutingT
 	return rt, nil
 }
 
-// Update is used to add a new Peer inside the Routing Table
+// Update is used to add a new FrisbeeNode inside the Routing Table
 func (rt *RoutingTable)Update(id ID, queryPeer bool, isReplaceable bool) (bool, error){
 
 
@@ -62,20 +61,23 @@ func (rt *RoutingTable)Update(id ID, queryPeer bool, isReplaceable bool) (bool, 
 	bucket.Update(id)
 
 	// TODO: Continue Algorithm To implement
+
+	return true, nil
 }
 
-// Remove is used to delete a Peer inside the Routing Table
-func (rt *RoutingTable)Remove(node kademlia.Peer){
+// Remove is used to delete a FrisbeeNode inside the Routing Table
+func (rt *RoutingTable)Remove(node *Contact){
 
 }
 
 // FindClosestPeer used to find the closes node in the network
-func (rt *RoutingTable) FindClosestPeer(targetId []byte) kademlia.Peer {
+func (rt *RoutingTable) FindClosestPeer(targetId []byte) Contact {
+	return Contact{}
 }
 
 // FindClosestPeers
-func (rt *RoutingTable) FindClosestPeers(targetId []byte) []kademlia.Peer {
-	return nil
+func (rt *RoutingTable) FindClosestPeers(targetId []byte) Contact {
+	return Contact{}
 }
 
 // PrinInfo prints a description about this RoutingTable

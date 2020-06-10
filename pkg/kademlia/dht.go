@@ -3,26 +3,38 @@ package kademlia
 import (
 	"context"
 	"fmt"
+	"time"
+
+	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/kbucket"
+
+	log "github.com/sirupsen/logrus"
 	"github/frisbee-cdn/frisbee-daemon/internal"
-	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia/kbucket"
+
 	"github/frisbee-cdn/frisbee-daemon/pkg/rpc"
 	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
-	"time"
+
 )
 
-type mode int
 
-const (
-	modeServer mode = iota + 1
-	modeClient
-)
 
-// Peer represents the node inside our network.
-type Peer struct {
+var logger = log.New()
+
+//type mode int
+//
+//const (
+//	modeServer mode = iota + 1
+//	modeClient
+//)
+
+
+
+// FrisbeeNode represents the node inside our network.
+type FrisbeeNode struct {
 	*model.Node
 
 	config    *internal.Configuration
-	net rpc.Network
+
+	net rpc.NetworkService
 
 	createdAt time.Time
 
@@ -31,32 +43,28 @@ type Peer struct {
 	routingTable *peer.RoutingTable
 
 	auto internal.ModeOpt
-	mode mode
-
-	bucketSize int
 
 
 }
 
 
 // BootStrap creates a new node in the newtork
-func BootStrap(config *internal.Configuration) *Peer {
+func BootStrap(config *internal.Configuration) *FrisbeeNode {
 
 	node, err := New(config)
 	if err != nil {
-		panic(fmt.Errorf("Peer startup failed"))
+		panic(fmt.Errorf("FrisbeeNode startup failed"))
 	}
 
 	return node
 }
 
-func New(cfg *internal.Configuration) (*Peer, error) {
+func New(cfg *internal.Configuration) (*FrisbeeNode, error) {
 
-	node := &Peer{
+	node := &FrisbeeNode{
 		Node:         new(model.Node),
 		config:       cfg,
 		createdAt:	  time.Now(),
-		bucketSize:   cfg.BucketSize,
 	}
 
 	// Hash IP Address and create Identifier
@@ -65,42 +73,34 @@ func New(cfg *internal.Configuration) (*Peer, error) {
 		return nil, err
 	}
 
-	node.Node.Id = id
-	node.Node.Port = cfg.Server.Port
-	node.Node.Addr = cfg.Server.Addr
+	node.Id = id
+	node.Port = cfg.Server.Port
+	node.Addr = cfg.Server.Addr
 
 	node.routingTable, err = peer.NewRoutingTable(cfg.BucketSize, id, time.Minute)
 
 	if err != nil{
-
+		logger.Fatalf("Failed creating routing table: ",err)
 	}
 
+	service := rpc.NetworkService{}
+
+	service.CreateServer(cfg.Server.Addr, cfg.Server.Port)
+
+	logger.Infof("Peer %o just started listening on: %v:%v", node.Id, node.Addr, node.Port)
 	return node, nil
 }
 
-func (n *Peer) join() error {
+func (n *FrisbeeNode) join(addr string, port uint32) error {
 	return nil
 }
 
-func (n *Peer) leave() error {
+func (n *FrisbeeNode) leave() error {
 
 	return nil
 }
 
-func (n *Peer) stabilize() {
+func (n *FrisbeeNode) stabilize() {
 
 }
-
-func (n *Peer) findCloserNode() {
-
-}
-
-func findNode() {
-
-}
-
-func discoverPeer() {
-
-}
-
 
