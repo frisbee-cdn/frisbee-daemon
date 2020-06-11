@@ -31,7 +31,7 @@ type Configuration struct {
 	Server ServerConfiguration
 
 	BucketSize int
-	HashSize int
+	HashSize   int
 
 	mode ModeOpt
 
@@ -43,6 +43,20 @@ type Configuration struct {
 type ServerConfiguration struct {
 	Addr string
 	Port uint32
+}
+
+// Defaults represents the default configuration parameters
+// TODO: Refactor this into a functins (e.g) GetDefaults() *Configuration {}
+var Defaults *Configuration = &Configuration{
+	Server: ServerConfiguration{
+		Addr: "localhost",
+		Port: 8080,
+	},
+	BucketSize: 20,
+	HashSize:   160,
+	mode:       MODE_AUTO,
+	Timeout:    10 * time.Millisecond,
+	MaxIdle:    100 * time.Millisecond,
 }
 
 func readConfig(filename string, defaults map[string]interface{}) (*viper.Viper, error) {
