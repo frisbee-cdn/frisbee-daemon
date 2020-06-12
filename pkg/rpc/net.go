@@ -52,7 +52,7 @@ func (n *NetworkService) Start() {
 
 // CreateClient
 // TODO: Rename CreateClient into Connect(context, address)
-func (n *NetworkService) CreateClient(serverAddr string) (service.FrisbeeClient, error) {
+func (n *NetworkService) Connect(serverAddr string) (service.FrisbeeClient, error) {
 
 	conn, err := grpc.Dial(serverAddr)
 	if err != nil {

@@ -91,7 +91,8 @@ func New(ownId string, port uint32, conf *config.Configuration) (*FrisbeeNode, e
 	}
 
 	logger.Infof("Peer %x just started listening on: %v:%v", node.Id, node.Addr, node.Port)
-	node.service.Start()
+	// Start service connections
+	go node.service.Start()
 
 	return node, nil
 }
@@ -99,7 +100,7 @@ func New(ownId string, port uint32, conf *config.Configuration) (*FrisbeeNode, e
 func (n *FrisbeeNode) Join(addr string, port uint32) {
 
 	logger.Printf("Trying to connect to: %s:%d...", addr, port)
-	client, err := n.service.CreateClient(fmt.Sprintf("%s:%d", addr, port))
+	client, err := n.service.Connect(fmt.Sprintf("%s:%d", addr, port))
 	if err != nil {
 		logger.Fatal("Failed to create client")
 	}
@@ -110,11 +111,6 @@ func (n *FrisbeeNode) Join(addr string, port uint32) {
 	logger.Printf("Recevied from Bootstrap node: ", r.Status)
 }
 
-func (n *FrisbeeNode) leave() error {
-
+func (n *FrisbeeNode) shutdown() error {
 	return nil
-}
-
-func (n *FrisbeeNode) stabilize() {
-
 }
