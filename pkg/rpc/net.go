@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 
 	log "github.com/sirupsen/logrus"
 
@@ -20,32 +18,32 @@ var logger = log.New()
 type NetworkService struct {
 	cfg    config.ServerConfiguration
 	server *grpc.Server
+	sock  *net.TCPListener
 }
 
 // NewNetworkService creates a new service and initializes all server info
-func NewNetworkService(cfg config.ServerConfiguration) *NetworkService {
+func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService,error) {
+
+	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.Addr, cfg.Port))
+	if err != nil {
+		return nil, err
+	}
 
 	proto := &NetworkService{
+		sock:	listener.(*net.TCPListener),
 		cfg:    cfg,
 		server: grpc.NewServer(),
 	}
 
-	service.RegisterFrisbeeServer(proto.server, proto)
-
-	reflection.Register(proto.server)
-
-	return proto
+	return proto,nil
 
 }
+
 
 // CreateServer
 func (n *NetworkService) Start() {
 
-	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%d", n.cfg.Addr, n.cfg.Port))
-	if err != nil {
-		logger.Fatalf("Failed to listen: %v", err)
-	}
-	if err := n.server.Serve(listen); err != nil {
+	if err := n.server.Serve(n.sock); err != nil {
 		logger.Fatalf("Failed to serve: %v", err)
 	}
 }
@@ -65,23 +63,7 @@ func (n *NetworkService) Connect(serverAddr string) (service.FrisbeeClient, erro
 	return client, nil
 }
 
-// Ping
-func (n *NetworkService) Ping(ctx context.Context, reqBody *service.CheckStatusRequest) (*service.CheckStatusReply, error) {
-	logger.Info("Ping: ", reqBody.GetMessage())
-	return &service.CheckStatusReply{Status: "Pong"}, nil
-}
-
-// Store
-func (n *NetworkService) Store(ctx context.Context, reqBody *service.StoreRequest) (*service.Error, error) {
-	return nil, nil
-}
-
-// FindNode
-func (n *NetworkService) FindNode(ctx context.Context, reqBody *service.ID) (*service.NodeResponse, error) {
-	return nil, nil
-}
-
-// FindValue
-func (n *NetworkService) FindValue(ctx context.Context, reqBody *service.ID) (*service.StorageResponse, error) {
-	return nil, nil
+// GetServer returns the server
+func (n *NetworkService) GetServer() *grpc.Server {
+	return n.server
 }

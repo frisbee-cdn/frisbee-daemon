@@ -1,4 +1,4 @@
-package peer
+package kbucket
 
 import (
 	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
@@ -56,7 +56,7 @@ func (rt *RoutingTable) Add(node *model.Node, queryPeer bool, isReplaceable bool
 
 		if bucket.Len() < rt.bucketSize {
 			bucket.PushBack(&Contact{
-				Id:			  node.Id
+				Id:			  node.Id,
 				LastUsefulAt: lastUsefulAt,
 				AddedAt:      now,
 				replaceable:  isReplaceable,

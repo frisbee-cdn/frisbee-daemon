@@ -1,4 +1,4 @@
-package peer
+package kbucket
 
 import (
 	"bytes"

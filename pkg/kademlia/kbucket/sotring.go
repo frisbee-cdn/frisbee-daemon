@@ -15,6 +15,10 @@ type peerDistanceSorter struct {
 	target ID
 }
 
+func (pds *peerDistanceSorter) Less(i, j int) bool {
+	return pds.peers[i].distance.less(pds.peers[j].distance)
+}
+
 func (pds *peerDistanceSorter) Len() int { return len(pds.peers) }
 func (pds *peerDistanceSorter) Swap(a, b int) {
 	pds.peers[a], pds.peers[b] = pds.peers[b], pds.peers[a]
