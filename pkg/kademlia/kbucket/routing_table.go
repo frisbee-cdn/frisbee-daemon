@@ -1,13 +1,14 @@
 package kbucket
 
 import (
+	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 	"time"
 )
 
 // RoutingTable used to store a subset of kbucket's of the network.
 type RoutingTable struct {
-	self ID
+	local ID
 
 	KBuckets   []*KBucket
 	bucketSize int
@@ -17,13 +18,12 @@ type RoutingTable struct {
 }
 
 // NewRoutingTable is used to create an new empty routing table.
-func NewRoutingTable(bucketsize int, local ID, latency time.Duration) (*RoutingTable, error) {
+func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*RoutingTable, error) {
 
 	rt := &RoutingTable{
 		KBuckets:   []*KBucket{NewBucket()},
 		bucketSize: bucketsize,
-
-		self: local,
+		local:      localID,
 
 		maxLatency: latency,
 	}
@@ -32,9 +32,9 @@ func NewRoutingTable(bucketsize int, local ID, latency time.Duration) (*RoutingT
 }
 
 // Update is used to add a new FrisbeeNode inside the Routing Table
-func (rt *RoutingTable) Add(node *model.Node, queryPeer bool, isReplaceable bool) (bool, error) {
+func (rt *RoutingTable) Add(p peer.ID, node *model.Node, queryPeer bool, isReplaceable bool) (bool, error) {
 
-	bucketId := rt.bucketIdForPeer(node.Id)
+	bucketId := rt.bucketIdForPeer(p)
 	bucket := rt.KBuckets[bucketId]
 
 	now := time.Now()
@@ -44,19 +44,20 @@ func (rt *RoutingTable) Add(node *model.Node, queryPeer bool, isReplaceable bool
 	}
 
 	// peer already exists in the Routing TAble
-	if peer := bucket.find(node.Id); peer != nil {
+	if peer := bucket.find(p); peer != nil {
 
 		if peer.LastUsefulAt.IsZero() && queryPeer {
 			peer.LastUsefulAt = lastUsefulAt
 		}
 
-		bucket.MoveToBack(node.Id)
+		bucket.MoveToBack(p)
 		return true, nil
 	} else {
 
 		if bucket.Len() < rt.bucketSize {
 			bucket.PushBack(&Contact{
-				Id:			  node.Id,
+				Node:         node,
+				ownerId:      p,
 				LastUsefulAt: lastUsefulAt,
 				AddedAt:      now,
 				replaceable:  isReplaceable,
@@ -70,12 +71,12 @@ func (rt *RoutingTable) Add(node *model.Node, queryPeer bool, isReplaceable bool
 }
 
 // Remove is used to delete a FrisbeeNode inside the Routing Table
-func (rt *RoutingTable) Remove(id ID) bool {
+func (rt *RoutingTable) Remove(p peer.ID) bool {
 
-	bucketId := rt.bucketIdForPeer(id)
-	bucket := rt.KBuckets[bucketId]
+	bucketID := rt.bucketIdForPeer(p)
+	bucket := rt.KBuckets[bucketID]
 
-	if bucket.remove(id) {
+	if bucket.remove(p) {
 
 		for {
 			lastBucketIndex := len(rt.KBuckets) - 1
@@ -96,45 +97,45 @@ func (rt *RoutingTable) Remove(id ID) bool {
 }
 
 // FindClosestPeer used to find the closes node in the network
-func (rt *RoutingTable) FindClosestPeer(targetId ID) Contact {
+func (rt *RoutingTable) FindClosestPeer(targetID ID) Contact {
 	return Contact{}
 }
 
 // FindClosestPeers
-func (rt *RoutingTable) FindClosestPeers(targetId ID,  count int) []ID{
+func (rt *RoutingTable) FindClosestPeers(id ID, count int) []*Contact {
 
-	cpl := CommonPrefixLen(targetId, rt.self)
+	cpl := CommonPrefixLen(id, rt.local)
 
 	if cpl >= len(rt.KBuckets)-1 {
 		cpl = len(rt.KBuckets) - 1
 	}
 
 	pds := peerDistanceSorter{
-		peers: make([]peerDistance, 0, count+rt.bucketSize),
-		target: targetId,
+		peers:  make([]peerDistance, 0, count+rt.bucketSize),
+		target: id,
 	}
 
 	pds.appendPeersFromList(rt.KBuckets[cpl].List)
 
 	if pds.Len() < count {
-		for i := cpl + 1; i < len(rt.KBuckets); i++{
+		for i := cpl + 1; i < len(rt.KBuckets); i++ {
 			pds.appendPeersFromList(rt.KBuckets[i].List)
 		}
 	}
 
 	for i := cpl - 1; i >= 0 && pds.Len() < count; i-- {
-		pds.appendPeersFromList(rt.buckets[i].list)
+		pds.appendPeersFromList(rt.KBuckets[i].List)
 	}
 
 	pds.sort()
 
 	if count < pds.Len() {
-		pds.peers = prds.peers[:count]
+		pds.peers = pds.peers[:count]
 	}
 
-	out := make([]ID, 0, pds.Len())
-	for _, p := range pds.peers{
-		out = append(out, p.p)
+	out := make([]*Contact, 0, pds.Len())
+	for _, p := range pds.peers {
+		out = append(out, p.c)
 	}
 
 	return out
@@ -160,7 +161,7 @@ func (rt *RoutingTable) Size() int {
 func (rt *RoutingTable) nextBucket() {
 
 	bucket := rt.KBuckets[len(rt.KBuckets)-1]
-	newBucket := bucket.Split(len(rt.KBuckets), rt.self)
+	newBucket := bucket.Split(len(rt.KBuckets), rt.local)
 	rt.KBuckets = append(rt.KBuckets, newBucket)
 
 	if newBucket.Len() >= rt.bucketSize {
@@ -169,8 +170,10 @@ func (rt *RoutingTable) nextBucket() {
 
 }
 
-func (rt *RoutingTable) bucketIdForPeer(target ID) int {
-	cpl := CommonPrefixLen(target, rt.self)
+func (rt *RoutingTable) bucketIdForPeer(p peer.ID) int {
+
+	peerID, _ := HashKey(p)
+	cpl := CommonPrefixLen(peerID, rt.local)
 
 	bucketId := cpl
 	if bucketId >= len(rt.KBuckets) {

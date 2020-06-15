@@ -2,7 +2,6 @@ package kademlia
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github/frisbee-cdn/frisbee-daemon/internal"
@@ -65,7 +64,7 @@ func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode,
 	}
 
 	// Hash IP Address and create Identifier
-	id, err := kb.HashKey(cfg.Server.Addr)
+	id, err := kb.HashKey(node.self)
 	if err != nil {
 		return nil, err
 	}
@@ -80,9 +79,9 @@ func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode,
 		logger.Fatalf("Failed creating routing table: ", err)
 	}
 
-	service, err  := rpc.NewNetworkService(cfg.Server)
+	service, err := rpc.NewNetworkService(cfg.Server)
 
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
@@ -98,46 +97,22 @@ func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode,
 	return node, nil
 }
 
-func (n *FrisbeeNode) Join(addr string, port uint32) {
+func (n *FrisbeeNode) Join(bootpNode string) {
 
-	logger.Printf("Trying to connect to: %s:%d...", addr, port)
-	client, err := n.service.Connect(fmt.Sprintf("%s:%d", addr, port))
-	if err != nil {
-		logger.Fatal("Failed to create client")
-	}
-	r, err := client.Ping(context.Background(), &proto.CheckStatusRequest{Message: "Ping"})
-	if err != nil {
-		logger.Fatalf("Node not alive: %v", err)
-	}
-	logger.Printf("Recevied from Bootstrap node: ", r.Status)
+	// logger.Printf("Trying to connect to: %s:%d...", addr, port)
+	// client, err := n.service.Connect(fmt.Sprintf("%s:%d", addr, port))
+	// if err != nil {
+	// 	logger.Fatal("Failed to create client")
+	// }
+	// r, err := client.Ping(context.Background(), &proto.CheckStatusRequest{Message: "Ping"})
+	// if err != nil {
+	// 	logger.Fatalf("Node not alive: %v", err)
+	// }
+	// logger.Printf("Recevied from Bootstrap node: ", r.Status)
 }
 
 func (n *FrisbeeNode) shutdown() error {
 	return nil
 }
 
-
-
-
 // RPC Interface Implementation
-
-// Ping
-func (n *FrisbeeNode) Ping(ctx context.Context, reqBody *proto.CheckStatusRequest) (*proto.CheckStatusReply, error) {
-	logger.Info("Ping: ", reqBody.GetMessage())
-	return &proto.CheckStatusReply{Status: "Pong"}, nil
-}
-
-// Store
-func (n *FrisbeeNode) Store(ctx context.Context, reqBody *proto.StoreRequest) (*proto.Error, error) {
-	return nil, nil
-}
-
-// FindNode
-func (n *FrisbeeNode) FindNode(ctx context.Context, reqBody *proto.ID) (*proto.NodeResponse, error) {
-	return nil, nil
-}
-
-// FindValue
-func (n *FrisbeeNode) FindValue(ctx context.Context, reqBody *proto.ID) (*proto.StorageResponse, error) {
-	return nil, nil
-}

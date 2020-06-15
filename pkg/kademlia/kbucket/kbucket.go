@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"time"
 
+	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 )
 
@@ -12,7 +13,7 @@ type Contact struct {
 	*model.Node
 
 	// Id of the peer
-	Id ID
+	ownerId peer.ID
 
 	LastUsefulAt time.Time
 
@@ -49,9 +50,9 @@ func (kb *KBucket) GetAllPeers() []Contact {
 
 // find returns the kbucket with the given Id if it exists
 // returns nil if the peerId does not exist in the kBucket
-func (kb *KBucket) find(id ID) *Contact {
+func (kb *KBucket) find(p peer.ID) *Contact {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if id.Equals(elem.Value.(*Contact).dhtId) {
+		if elem.Value.(*Contact).ownerId == p {
 			return elem.Value.(*Contact)
 		}
 	}
@@ -60,10 +61,10 @@ func (kb *KBucket) find(id ID) *Contact {
 
 // remove deletes the kbucket with the given Id it exists and returns true
 // returns false if the kbucket does not exist in the kBucket
-func (kb *KBucket) remove(id ID) bool {
+func (kb *KBucket) remove(p peer.ID) bool {
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if id.Equals(elem.Value.(*Contact).dhtId) {
+		if elem.Value.(*Contact).ownerId == p {
 			kb.List.Remove(elem)
 			return true
 		}
@@ -77,18 +78,18 @@ func (kb *KBucket) Len() int {
 }
 
 // MoveToFront
-func (kb *KBucket) MoveToFront(id ID) {
+func (kb *KBucket) MoveToFront(p peer.ID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if id.Equals(elem.Value.(*Contact).dhtId) {
+		if elem.Value.(*Contact).ownerId == p {
 			kb.List.MoveToFront(elem)
 		}
 	}
 }
 
 // MoveToBack
-func (kb *KBucket) MoveToBack(id ID) {
+func (kb *KBucket) MoveToBack(p peer.ID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if id.Equals(elem.Value.(*Contact).dhtId) {
+		if elem.Value.(*Contact).ownerId == p {
 			kb.List.MoveToBack(elem)
 		}
 	}
@@ -135,7 +136,7 @@ func (kb *KBucket) maxCommonPrefix(target ID) uint {
 
 	maxCpl := uint(0)
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).dhtId, target))
+		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Id, target))
 		if cpl > maxCpl {
 			maxCpl = cpl
 		}

@@ -18,11 +18,11 @@ var logger = log.New()
 type NetworkService struct {
 	cfg    config.ServerConfiguration
 	server *grpc.Server
-	sock  *net.TCPListener
+	sock   *net.TCPListener
 }
 
 // NewNetworkService creates a new service and initializes all server info
-func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService,error) {
+func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService, error) {
 
 	listener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.Addr, cfg.Port))
 	if err != nil {
@@ -30,15 +30,14 @@ func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService,error) {
 	}
 
 	proto := &NetworkService{
-		sock:	listener.(*net.TCPListener),
+		sock:   listener.(*net.TCPListener),
 		cfg:    cfg,
 		server: grpc.NewServer(),
 	}
 
-	return proto,nil
+	return proto, nil
 
 }
-
 
 // CreateServer
 func (n *NetworkService) Start() {
@@ -48,8 +47,7 @@ func (n *NetworkService) Start() {
 	}
 }
 
-// CreateClient
-// TODO: Rename CreateClient into Connect(context, address)
+// Connect
 func (n *NetworkService) Connect(serverAddr string) (service.FrisbeeClient, error) {
 
 	conn, err := grpc.Dial(serverAddr)

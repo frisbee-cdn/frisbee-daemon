@@ -8,7 +8,7 @@ func main() {
 
 	// cfg := config.InitConfiguration("development")
 
-	node, _ := kademlia.New("SanFrancisco", 5001, nil)
+	node, _ := kademlia.New("SanFrancisco-FirstNode", 5001, nil)
 	print(node)
 
 	// time.Sleep(2 * time.Second)
