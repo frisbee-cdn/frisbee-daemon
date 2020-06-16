@@ -31,9 +31,9 @@ func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*Routin
 }
 
 // Update is used to add a new FrisbeeNode inside the Routing Table
-func (rt *RoutingTable) Add(p peer.ID, node *peer.Node, queryPeer bool, isReplaceable bool) (bool, error) {
+func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool) (bool, error) {
 
-	bucketId := rt.bucketIdForPeer(p)
+	bucketId := rt.bucketIdForPeer(node.SelfID)
 	bucket := rt.KBuckets[bucketId]
 
 	now := time.Now()
@@ -43,13 +43,13 @@ func (rt *RoutingTable) Add(p peer.ID, node *peer.Node, queryPeer bool, isReplac
 	}
 
 	// peer already exists in the Routing TAble
-	if peer := bucket.find(p); peer != nil {
+	if peer := bucket.find(node.SelfID); peer != nil {
 
 		if peer.LastUsefulAt.IsZero() && queryPeer {
 			peer.LastUsefulAt = lastUsefulAt
 		}
 
-		bucket.MoveToBack(p)
+		bucket.MoveToBack(node.SelfID)
 		return true, nil
 	} else {
 

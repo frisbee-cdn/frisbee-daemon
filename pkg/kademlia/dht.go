@@ -74,7 +74,7 @@ func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, 
 
 	dht.service = service
 
-	proto.RegisterFrisbeeServer(dht.service.GetServer(), dht)
+	proto.RegisterFrisbeeProtocolServer(dht.service.GetServer(), dht)
 
 	// Start service connections
 	go dht.service.Start()
@@ -85,6 +85,17 @@ func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, 
 }
 
 func (n *FrisbeeDHT) Join() {
+
+	// The first bootstrap node is selected for testing purposes
+
+	/*TODO:
+	1. Get The First BootstrapNode
+	2. Ping The Bootstrap Node ( if everything goes ok, they will add each other so BN will knwo NN and vice versa)
+	3. Sender Will perform FIND_NODE RPC to BN to find k clossest nodes from it
+	4. Ping every node recieved to learn about them and they as well
+	5. NN is now connected inside the network, and other nodes know about it
+	6. *Optionally you can perform an iterative_finde_node to get a better idea of the nodes inside the network
+	*/
 
 }
 

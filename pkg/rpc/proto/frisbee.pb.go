@@ -80,39 +80,39 @@ func (m *Node) GetAddr() string {
 	return ""
 }
 
-type NodeResponse struct {
+type ContactsResponse struct {
 	Nodes                []*Node  `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *NodeResponse) Reset()         { *m = NodeResponse{} }
-func (m *NodeResponse) String() string { return proto.CompactTextString(m) }
-func (*NodeResponse) ProtoMessage()    {}
-func (*NodeResponse) Descriptor() ([]byte, []int) {
+func (m *ContactsResponse) Reset()         { *m = ContactsResponse{} }
+func (m *ContactsResponse) String() string { return proto.CompactTextString(m) }
+func (*ContactsResponse) ProtoMessage()    {}
+func (*ContactsResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ede8bc4112172419, []int{1}
 }
 
-func (m *NodeResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_NodeResponse.Unmarshal(m, b)
+func (m *ContactsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ContactsResponse.Unmarshal(m, b)
 }
-func (m *NodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_NodeResponse.Marshal(b, m, deterministic)
+func (m *ContactsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ContactsResponse.Marshal(b, m, deterministic)
 }
-func (m *NodeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeResponse.Merge(m, src)
+func (m *ContactsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ContactsResponse.Merge(m, src)
 }
-func (m *NodeResponse) XXX_Size() int {
-	return xxx_messageInfo_NodeResponse.Size(m)
+func (m *ContactsResponse) XXX_Size() int {
+	return xxx_messageInfo_ContactsResponse.Size(m)
 }
-func (m *NodeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_NodeResponse.DiscardUnknown(m)
+func (m *ContactsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ContactsResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_NodeResponse proto.InternalMessageInfo
+var xxx_messageInfo_ContactsResponse proto.InternalMessageInfo
 
-func (m *NodeResponse) GetNodes() []*Node {
+func (m *ContactsResponse) GetNodes() []*Node {
 	if m != nil {
 		return m.Nodes
 	}
@@ -120,6 +120,7 @@ func (m *NodeResponse) GetNodes() []*Node {
 }
 
 type Error struct {
+	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -150,6 +151,52 @@ func (m *Error) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Error proto.InternalMessageInfo
 
+func (m *Error) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+type Key struct {
+	Id                   []byte   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Key) Reset()         { *m = Key{} }
+func (m *Key) String() string { return proto.CompactTextString(m) }
+func (*Key) ProtoMessage()    {}
+func (*Key) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{3}
+}
+
+func (m *Key) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Key.Unmarshal(m, b)
+}
+func (m *Key) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Key.Marshal(b, m, deterministic)
+}
+func (m *Key) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Key.Merge(m, src)
+}
+func (m *Key) XXX_Size() int {
+	return xxx_messageInfo_Key.Size(m)
+}
+func (m *Key) XXX_DiscardUnknown() {
+	xxx_messageInfo_Key.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Key proto.InternalMessageInfo
+
+func (m *Key) GetId() []byte {
+	if m != nil {
+		return m.Id
+	}
+	return nil
+}
+
 type ID struct {
 	Id                   []byte   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -161,7 +208,7 @@ func (m *ID) Reset()         { *m = ID{} }
 func (m *ID) String() string { return proto.CompactTextString(m) }
 func (*ID) ProtoMessage()    {}
 func (*ID) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{3}
+	return fileDescriptor_ede8bc4112172419, []int{4}
 }
 
 func (m *ID) XXX_Unmarshal(b []byte) error {
@@ -189,86 +236,102 @@ func (m *ID) GetId() []byte {
 	return nil
 }
 
-type CheckStatusRequest struct {
+type PingRequest struct {
 	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Origin               *Node    `protobuf:"bytes,2,opt,name=origin,proto3" json:"origin,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CheckStatusRequest) Reset()         { *m = CheckStatusRequest{} }
-func (m *CheckStatusRequest) String() string { return proto.CompactTextString(m) }
-func (*CheckStatusRequest) ProtoMessage()    {}
-func (*CheckStatusRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{4}
+func (m *PingRequest) Reset()         { *m = PingRequest{} }
+func (m *PingRequest) String() string { return proto.CompactTextString(m) }
+func (*PingRequest) ProtoMessage()    {}
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{5}
 }
 
-func (m *CheckStatusRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CheckStatusRequest.Unmarshal(m, b)
+func (m *PingRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PingRequest.Unmarshal(m, b)
 }
-func (m *CheckStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CheckStatusRequest.Marshal(b, m, deterministic)
+func (m *PingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PingRequest.Marshal(b, m, deterministic)
 }
-func (m *CheckStatusRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CheckStatusRequest.Merge(m, src)
+func (m *PingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PingRequest.Merge(m, src)
 }
-func (m *CheckStatusRequest) XXX_Size() int {
-	return xxx_messageInfo_CheckStatusRequest.Size(m)
+func (m *PingRequest) XXX_Size() int {
+	return xxx_messageInfo_PingRequest.Size(m)
 }
-func (m *CheckStatusRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_CheckStatusRequest.DiscardUnknown(m)
+func (m *PingRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_PingRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CheckStatusRequest proto.InternalMessageInfo
+var xxx_messageInfo_PingRequest proto.InternalMessageInfo
 
-func (m *CheckStatusRequest) GetMessage() string {
+func (m *PingRequest) GetMessage() string {
 	if m != nil {
 		return m.Message
 	}
 	return ""
 }
 
-type CheckStatusReply struct {
+func (m *PingRequest) GetOrigin() *Node {
+	if m != nil {
+		return m.Origin
+	}
+	return nil
+}
+
+type PingReply struct {
 	Status               string   `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+	Error                *Error   `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *CheckStatusReply) Reset()         { *m = CheckStatusReply{} }
-func (m *CheckStatusReply) String() string { return proto.CompactTextString(m) }
-func (*CheckStatusReply) ProtoMessage()    {}
-func (*CheckStatusReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{5}
+func (m *PingReply) Reset()         { *m = PingReply{} }
+func (m *PingReply) String() string { return proto.CompactTextString(m) }
+func (*PingReply) ProtoMessage()    {}
+func (*PingReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{6}
 }
 
-func (m *CheckStatusReply) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CheckStatusReply.Unmarshal(m, b)
+func (m *PingReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PingReply.Unmarshal(m, b)
 }
-func (m *CheckStatusReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CheckStatusReply.Marshal(b, m, deterministic)
+func (m *PingReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PingReply.Marshal(b, m, deterministic)
 }
-func (m *CheckStatusReply) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CheckStatusReply.Merge(m, src)
+func (m *PingReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PingReply.Merge(m, src)
 }
-func (m *CheckStatusReply) XXX_Size() int {
-	return xxx_messageInfo_CheckStatusReply.Size(m)
+func (m *PingReply) XXX_Size() int {
+	return xxx_messageInfo_PingReply.Size(m)
 }
-func (m *CheckStatusReply) XXX_DiscardUnknown() {
-	xxx_messageInfo_CheckStatusReply.DiscardUnknown(m)
+func (m *PingReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_PingReply.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_CheckStatusReply proto.InternalMessageInfo
+var xxx_messageInfo_PingReply proto.InternalMessageInfo
 
-func (m *CheckStatusReply) GetStatus() string {
+func (m *PingReply) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
 	return ""
 }
 
+func (m *PingReply) GetError() *Error {
+	if m != nil {
+		return m.Error
+	}
+	return nil
+}
+
 type StoreRequest struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Key                  []byte   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	Content              []byte   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -279,7 +342,7 @@ func (m *StoreRequest) Reset()         { *m = StoreRequest{} }
 func (m *StoreRequest) String() string { return proto.CompactTextString(m) }
 func (*StoreRequest) ProtoMessage()    {}
 func (*StoreRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{6}
+	return fileDescriptor_ede8bc4112172419, []int{7}
 }
 
 func (m *StoreRequest) XXX_Unmarshal(b []byte) error {
@@ -300,11 +363,11 @@ func (m *StoreRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StoreRequest proto.InternalMessageInfo
 
-func (m *StoreRequest) GetKey() string {
+func (m *StoreRequest) GetKey() []byte {
 	if m != nil {
 		return m.Key
 	}
-	return ""
+	return nil
 }
 
 func (m *StoreRequest) GetContent() []byte {
@@ -325,7 +388,7 @@ func (m *StorageResponse) Reset()         { *m = StorageResponse{} }
 func (m *StorageResponse) String() string { return proto.CompactTextString(m) }
 func (*StorageResponse) ProtoMessage()    {}
 func (*StorageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{7}
+	return fileDescriptor_ede8bc4112172419, []int{8}
 }
 
 func (m *StorageResponse) XXX_Unmarshal(b []byte) error {
@@ -355,11 +418,12 @@ func (m *StorageResponse) GetContent() []byte {
 
 func init() {
 	proto.RegisterType((*Node)(nil), "models.Node")
-	proto.RegisterType((*NodeResponse)(nil), "models.NodeResponse")
+	proto.RegisterType((*ContactsResponse)(nil), "models.ContactsResponse")
 	proto.RegisterType((*Error)(nil), "models.Error")
+	proto.RegisterType((*Key)(nil), "models.Key")
 	proto.RegisterType((*ID)(nil), "models.ID")
-	proto.RegisterType((*CheckStatusRequest)(nil), "models.CheckStatusRequest")
-	proto.RegisterType((*CheckStatusReply)(nil), "models.CheckStatusReply")
+	proto.RegisterType((*PingRequest)(nil), "models.PingRequest")
+	proto.RegisterType((*PingReply)(nil), "models.PingReply")
 	proto.RegisterType((*StoreRequest)(nil), "models.StoreRequest")
 	proto.RegisterType((*StorageResponse)(nil), "models.StorageResponse")
 }
@@ -369,29 +433,32 @@ func init() {
 }
 
 var fileDescriptor_ede8bc4112172419 = []byte{
-	// 340 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x3f, 0x4f, 0xc3, 0x30,
-	0x10, 0xc5, 0x9b, 0xf4, 0x1f, 0x3d, 0x52, 0xa8, 0xac, 0x0a, 0xa2, 0x4c, 0x91, 0xa7, 0x08, 0xa4,
-	0x0c, 0x61, 0x63, 0xe8, 0x42, 0xa9, 0xd4, 0x05, 0xa1, 0x54, 0x62, 0x4f, 0xeb, 0xa3, 0x44, 0x4d,
-	0xe3, 0x60, 0xbb, 0x43, 0x3f, 0x2c, 0xdf, 0x05, 0xd9, 0x89, 0x45, 0x02, 0x6c, 0xf7, 0x7c, 0xbf,
-	0xcb, 0xcb, 0x3b, 0x1b, 0xa6, 0xef, 0x22, 0x97, 0x5b, 0xc4, 0xb8, 0x12, 0x5c, 0x71, 0x32, 0x3a,
-	0x72, 0x86, 0x85, 0xa4, 0x0b, 0x18, 0xbc, 0x70, 0x86, 0xe4, 0x0a, 0xdc, 0x9c, 0xf9, 0x4e, 0xe8,
-	0x44, 0x5e, 0xea, 0xe6, 0x8c, 0x10, 0x18, 0x54, 0x5c, 0x28, 0xdf, 0x0d, 0x9d, 0x68, 0x9a, 0x9a,
-	0x5a, 0x9f, 0x65, 0x8c, 0x09, 0xbf, 0x1f, 0x3a, 0xd1, 0x24, 0x35, 0x35, 0x4d, 0xc0, 0xd3, 0xf3,
-	0x29, 0xca, 0x8a, 0x97, 0x12, 0x09, 0x85, 0x61, 0xc9, 0x19, 0x4a, 0xdf, 0x09, 0xfb, 0xd1, 0x65,
-	0xe2, 0xc5, 0xb5, 0x4f, 0x6c, 0xa0, 0xba, 0x45, 0xc7, 0x30, 0x7c, 0x16, 0x82, 0x0b, 0x3a, 0x07,
-	0x77, 0xbd, 0xfc, 0x6d, 0x4d, 0x63, 0x20, 0x4f, 0x1f, 0xb8, 0x3b, 0x6c, 0x54, 0xa6, 0x4e, 0x32,
-	0xc5, 0xcf, 0x13, 0x4a, 0x45, 0x7c, 0x18, 0x1f, 0x51, 0xca, 0x6c, 0x8f, 0x06, 0x9d, 0xa4, 0x56,
-	0xd2, 0x3b, 0x98, 0x75, 0xf8, 0xaa, 0x38, 0x93, 0x1b, 0x18, 0x49, 0x23, 0x1b, 0xb8, 0x51, 0xf4,
-	0x11, 0xbc, 0x8d, 0xe2, 0x02, 0xed, 0x57, 0x67, 0xd0, 0x3f, 0xe0, 0xb9, 0x81, 0x74, 0xa9, 0x7d,
-	0x76, 0xbc, 0x54, 0x58, 0xd6, 0xd9, 0xbd, 0xd4, 0x4a, 0x7a, 0x0f, 0xd7, 0x7a, 0x36, 0xdb, 0xff,
-	0xa4, 0x6d, 0xc1, 0x4e, 0x07, 0x4e, 0xbe, 0x1c, 0x18, 0xaf, 0xea, 0x8d, 0x93, 0x05, 0x0c, 0x5e,
-	0xf3, 0x72, 0x4f, 0x02, 0xbb, 0x8c, 0xbf, 0xf1, 0x02, 0xff, 0xdf, 0x5e, 0x55, 0x9c, 0x69, 0x8f,
-	0xc4, 0x30, 0x34, 0x3f, 0x4d, 0xe6, 0x16, 0x6a, 0x67, 0x08, 0xa6, 0xf6, 0xb4, 0x5e, 0xaa, 0xe6,
-	0x2f, 0x56, 0x79, 0xc9, 0xcc, 0xbd, 0x82, 0x6d, 0xae, 0x97, 0xc1, 0xbc, 0x73, 0x19, 0x4d, 0x06,
-	0xda, 0x23, 0x09, 0x4c, 0x34, 0xff, 0x96, 0x15, 0xa7, 0xee, 0xc0, 0x6d, 0xdb, 0xaf, 0x95, 0x9b,
-	0xf6, 0xb6, 0x23, 0xf3, 0x8c, 0x1e, 0xbe, 0x03, 0x00, 0x00, 0xff, 0xff, 0x90, 0xcc, 0x55, 0xbd,
-	0x57, 0x02, 0x00, 0x00,
+	// 395 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0x4d, 0x6f, 0xd4, 0x30,
+	0x10, 0xdd, 0xec, 0x17, 0xec, 0x6c, 0x96, 0x96, 0xa1, 0x40, 0x94, 0x53, 0x30, 0x1c, 0x22, 0x21,
+	0x45, 0x68, 0x2b, 0x71, 0xe0, 0xc0, 0x85, 0x52, 0x51, 0x55, 0xa0, 0xca, 0x48, 0xdc, 0xd3, 0xf5,
+	0x10, 0x45, 0x64, 0xed, 0x60, 0x7b, 0x0f, 0xf9, 0xaf, 0xfc, 0x18, 0x64, 0x27, 0x46, 0xd9, 0x45,
+	0xbd, 0xcd, 0xcc, 0x1b, 0xbf, 0x79, 0x6f, 0x3c, 0xb0, 0xf9, 0xa9, 0x6b, 0x73, 0x4f, 0x54, 0xb4,
+	0x5a, 0x59, 0x85, 0xcb, 0xbd, 0x12, 0xd4, 0x18, 0xf6, 0x11, 0xe6, 0xdf, 0x94, 0x20, 0x7c, 0x02,
+	0xd3, 0x5a, 0x24, 0x51, 0x16, 0xe5, 0x31, 0x9f, 0xd6, 0x02, 0x11, 0xe6, 0xad, 0xd2, 0x36, 0x99,
+	0x66, 0x51, 0xbe, 0xe1, 0x3e, 0x76, 0xb5, 0x52, 0x08, 0x9d, 0xcc, 0xb2, 0x28, 0x5f, 0x71, 0x1f,
+	0xb3, 0xf7, 0x70, 0xfe, 0x49, 0x49, 0x5b, 0xee, 0xac, 0xe1, 0x64, 0x5a, 0x25, 0x0d, 0x21, 0x83,
+	0x85, 0x54, 0x82, 0x4c, 0x12, 0x65, 0xb3, 0x7c, 0xbd, 0x8d, 0x8b, 0x7e, 0x56, 0xe1, 0x06, 0xf1,
+	0x1e, 0x62, 0xaf, 0x60, 0xf1, 0x59, 0x6b, 0xa5, 0x31, 0x81, 0x47, 0x7b, 0x32, 0xa6, 0xac, 0xc8,
+	0x4f, 0x5f, 0xf1, 0x90, 0xb2, 0xe7, 0x30, 0xbb, 0xa5, 0xee, 0x54, 0x19, 0xbb, 0x80, 0xe9, 0xcd,
+	0xd5, 0x7f, 0xd5, 0xaf, 0xb0, 0xbe, 0xab, 0x65, 0xc5, 0xe9, 0xf7, 0x81, 0x8c, 0x7d, 0x98, 0x15,
+	0xdf, 0xc0, 0x52, 0xe9, 0xba, 0xaa, 0xa5, 0xb7, 0x76, 0xaa, 0x6e, 0xc0, 0xd8, 0x17, 0x58, 0xf5,
+	0x74, 0x6d, 0xd3, 0xe1, 0x0b, 0x58, 0x1a, 0x5b, 0xda, 0x83, 0x19, 0xb8, 0x86, 0x0c, 0x5f, 0xc3,
+	0x82, 0x9c, 0x87, 0x81, 0x69, 0x13, 0x98, 0xbc, 0x31, 0xde, 0x63, 0xec, 0x03, 0xc4, 0xdf, 0xad,
+	0xd2, 0x14, 0x94, 0x9d, 0xc3, 0xec, 0x17, 0x75, 0x83, 0x72, 0x17, 0x3a, 0xad, 0x3b, 0x25, 0x2d,
+	0xc9, 0x7e, 0xdb, 0x31, 0x0f, 0x29, 0x7b, 0x0b, 0x67, 0xee, 0x6d, 0x59, 0xd1, 0xbf, 0xdd, 0x8e,
+	0x9a, 0xa3, 0xa3, 0xe6, 0xed, 0x9f, 0x08, 0xce, 0xae, 0xfb, 0x3f, 0xbe, 0x73, 0x5f, 0xbc, 0x53,
+	0x0d, 0xbe, 0x83, 0xb9, 0xb3, 0x81, 0xcf, 0x82, 0xb4, 0xd1, 0x8e, 0xd2, 0xa7, 0xc7, 0xc5, 0xb6,
+	0xe9, 0xd8, 0x04, 0x0b, 0x58, 0x78, 0xb9, 0x78, 0x11, 0xd0, 0xb1, 0xfa, 0xf4, 0xd8, 0x23, 0x9b,
+	0xe0, 0x16, 0x1e, 0x5f, 0xd7, 0x52, 0xf8, 0x1b, 0x82, 0x00, 0xde, 0x5c, 0xa5, 0x49, 0x88, 0x4f,
+	0xaf, 0x83, 0x4d, 0xf0, 0x12, 0x56, 0xee, 0xcd, 0x8f, 0xb2, 0x39, 0x10, 0xae, 0x43, 0xe3, 0x2d,
+	0x75, 0xe9, 0xcb, 0xf1, 0xd0, 0x91, 0x6d, 0x36, 0xb9, 0x5f, 0xfa, 0xbb, 0xbd, 0xfc, 0x1b, 0x00,
+	0x00, 0xff, 0xff, 0x4d, 0x6e, 0xa2, 0x98, 0xc8, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -402,180 +469,180 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// FrisbeeClient is the client API for Frisbee service.
+// FrisbeeProtocolClient is the client API for FrisbeeProtocol service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type FrisbeeClient interface {
-	Ping(ctx context.Context, in *CheckStatusRequest, opts ...grpc.CallOption) (*CheckStatusReply, error)
+type FrisbeeProtocolClient interface {
+	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
 	Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*Error, error)
-	FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*NodeResponse, error)
-	FindValue(ctx context.Context, in *ID, opts ...grpc.CallOption) (*StorageResponse, error)
+	FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ContactsResponse, error)
+	FindValue(ctx context.Context, in *Key, opts ...grpc.CallOption) (*StorageResponse, error)
 }
 
-type frisbeeClient struct {
+type frisbeeProtocolClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFrisbeeClient(cc grpc.ClientConnInterface) FrisbeeClient {
-	return &frisbeeClient{cc}
+func NewFrisbeeProtocolClient(cc grpc.ClientConnInterface) FrisbeeProtocolClient {
+	return &frisbeeProtocolClient{cc}
 }
 
-func (c *frisbeeClient) Ping(ctx context.Context, in *CheckStatusRequest, opts ...grpc.CallOption) (*CheckStatusReply, error) {
-	out := new(CheckStatusReply)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/Ping", in, out, opts...)
+func (c *frisbeeProtocolClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error) {
+	out := new(PingReply)
+	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/Ping", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *frisbeeClient) Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*Error, error) {
+func (c *frisbeeProtocolClient) Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*Error, error) {
 	out := new(Error)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/Store", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/Store", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *frisbeeClient) FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*NodeResponse, error) {
-	out := new(NodeResponse)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/FindNode", in, out, opts...)
+func (c *frisbeeProtocolClient) FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ContactsResponse, error) {
+	out := new(ContactsResponse)
+	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/FindNode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *frisbeeClient) FindValue(ctx context.Context, in *ID, opts ...grpc.CallOption) (*StorageResponse, error) {
+func (c *frisbeeProtocolClient) FindValue(ctx context.Context, in *Key, opts ...grpc.CallOption) (*StorageResponse, error) {
 	out := new(StorageResponse)
-	err := c.cc.Invoke(ctx, "/models.Frisbee/FindValue", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/FindValue", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FrisbeeServer is the server API for Frisbee service.
-type FrisbeeServer interface {
-	Ping(context.Context, *CheckStatusRequest) (*CheckStatusReply, error)
+// FrisbeeProtocolServer is the server API for FrisbeeProtocol service.
+type FrisbeeProtocolServer interface {
+	Ping(context.Context, *PingRequest) (*PingReply, error)
 	Store(context.Context, *StoreRequest) (*Error, error)
-	FindNode(context.Context, *ID) (*NodeResponse, error)
-	FindValue(context.Context, *ID) (*StorageResponse, error)
+	FindNode(context.Context, *ID) (*ContactsResponse, error)
+	FindValue(context.Context, *Key) (*StorageResponse, error)
 }
 
-// UnimplementedFrisbeeServer can be embedded to have forward compatible implementations.
-type UnimplementedFrisbeeServer struct {
+// UnimplementedFrisbeeProtocolServer can be embedded to have forward compatible implementations.
+type UnimplementedFrisbeeProtocolServer struct {
 }
 
-func (*UnimplementedFrisbeeServer) Ping(ctx context.Context, req *CheckStatusRequest) (*CheckStatusReply, error) {
+func (*UnimplementedFrisbeeProtocolServer) Ping(ctx context.Context, req *PingRequest) (*PingReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (*UnimplementedFrisbeeServer) Store(ctx context.Context, req *StoreRequest) (*Error, error) {
+func (*UnimplementedFrisbeeProtocolServer) Store(ctx context.Context, req *StoreRequest) (*Error, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Store not implemented")
 }
-func (*UnimplementedFrisbeeServer) FindNode(ctx context.Context, req *ID) (*NodeResponse, error) {
+func (*UnimplementedFrisbeeProtocolServer) FindNode(ctx context.Context, req *ID) (*ContactsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNode not implemented")
 }
-func (*UnimplementedFrisbeeServer) FindValue(ctx context.Context, req *ID) (*StorageResponse, error) {
+func (*UnimplementedFrisbeeProtocolServer) FindValue(ctx context.Context, req *Key) (*StorageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindValue not implemented")
 }
 
-func RegisterFrisbeeServer(s *grpc.Server, srv FrisbeeServer) {
-	s.RegisterService(&_Frisbee_serviceDesc, srv)
+func RegisterFrisbeeProtocolServer(s *grpc.Server, srv FrisbeeProtocolServer) {
+	s.RegisterService(&_FrisbeeProtocol_serviceDesc, srv)
 }
 
-func _Frisbee_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckStatusRequest)
+func _FrisbeeProtocol_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FrisbeeServer).Ping(ctx, in)
+		return srv.(FrisbeeProtocolServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/models.Frisbee/Ping",
+		FullMethod: "/models.FrisbeeProtocol/Ping",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).Ping(ctx, req.(*CheckStatusRequest))
+		return srv.(FrisbeeProtocolServer).Ping(ctx, req.(*PingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Frisbee_Store_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FrisbeeProtocol_Store_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StoreRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FrisbeeServer).Store(ctx, in)
+		return srv.(FrisbeeProtocolServer).Store(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/models.Frisbee/Store",
+		FullMethod: "/models.FrisbeeProtocol/Store",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).Store(ctx, req.(*StoreRequest))
+		return srv.(FrisbeeProtocolServer).Store(ctx, req.(*StoreRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Frisbee_FindNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FrisbeeProtocol_FindNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ID)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FrisbeeServer).FindNode(ctx, in)
+		return srv.(FrisbeeProtocolServer).FindNode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/models.Frisbee/FindNode",
+		FullMethod: "/models.FrisbeeProtocol/FindNode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).FindNode(ctx, req.(*ID))
+		return srv.(FrisbeeProtocolServer).FindNode(ctx, req.(*ID))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Frisbee_FindValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
+func _FrisbeeProtocol_FindValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Key)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FrisbeeServer).FindValue(ctx, in)
+		return srv.(FrisbeeProtocolServer).FindValue(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/models.Frisbee/FindValue",
+		FullMethod: "/models.FrisbeeProtocol/FindValue",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeServer).FindValue(ctx, req.(*ID))
+		return srv.(FrisbeeProtocolServer).FindValue(ctx, req.(*Key))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _Frisbee_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "models.Frisbee",
-	HandlerType: (*FrisbeeServer)(nil),
+var _FrisbeeProtocol_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "models.FrisbeeProtocol",
+	HandlerType: (*FrisbeeProtocolServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Ping",
-			Handler:    _Frisbee_Ping_Handler,
+			Handler:    _FrisbeeProtocol_Ping_Handler,
 		},
 		{
 			MethodName: "Store",
-			Handler:    _Frisbee_Store_Handler,
+			Handler:    _FrisbeeProtocol_Store_Handler,
 		},
 		{
 			MethodName: "FindNode",
-			Handler:    _Frisbee_FindNode_Handler,
+			Handler:    _FrisbeeProtocol_FindNode_Handler,
 		},
 		{
 			MethodName: "FindValue",
-			Handler:    _Frisbee_FindValue_Handler,
+			Handler:    _FrisbeeProtocol_FindValue_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

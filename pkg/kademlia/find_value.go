@@ -6,7 +6,7 @@ import (
 )
 
 // FindValue RPC Abstract Call
-func (n *FrisbeeDHT) FindValue(ctx context.Context, reqBody *proto.ID) (*proto.StorageResponse, error) {
+func (n *FrisbeeDHT) FindValue(ctx context.Context, reqBody *proto.Key) (*proto.StorageResponse, error) {
 	return nil, nil
 }
 

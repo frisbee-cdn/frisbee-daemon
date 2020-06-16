@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	config "github/frisbee-cdn/frisbee-daemon/internal"
-	service "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
+	proto "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 )
 
 var logger = log.New()
@@ -48,7 +48,7 @@ func (n *NetworkService) Start() {
 }
 
 // Connect
-func (n *NetworkService) Connect(serverAddr string) (service.FrisbeeClient, error) {
+func (n *NetworkService) Connect(serverAddr string) (proto.FrisbeeProtocolClient, error) {
 
 	conn, err := grpc.Dial(serverAddr)
 	if err != nil {
@@ -56,7 +56,7 @@ func (n *NetworkService) Connect(serverAddr string) (service.FrisbeeClient, erro
 	}
 	defer conn.Close()
 
-	client := service.NewFrisbeeClient(conn)
+	client := proto.NewFrisbeeProtocolClient(conn)
 
 	return client, nil
 }
