@@ -2,27 +2,9 @@ package kbucket
 
 import (
 	"container/list"
-	"time"
 
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
-	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 )
-
-// Contact holds all related information for a peer in the K-Bucket
-type Contact struct {
-	*model.Node
-
-	// Id of the peer
-	ownerId peer.ID
-
-	LastUsefulAt time.Time
-
-	// Added At is the time this peer was added to the routing table
-	AddedAt time.Time
-
-	// if a bucket is full, this peer can be replaced to make space for a new peer.
-	replaceable bool
-}
 
 // KBucket is a list of routing addresses of other nodes in
 // the network.
@@ -52,7 +34,7 @@ func (kb *KBucket) GetAllPeers() []Contact {
 // returns nil if the peerId does not exist in the kBucket
 func (kb *KBucket) find(p peer.ID) *Contact {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).ownerId == p {
+		if elem.Value.(*Contact).Node.SelfID == p {
 			return elem.Value.(*Contact)
 		}
 	}
@@ -64,7 +46,7 @@ func (kb *KBucket) find(p peer.ID) *Contact {
 func (kb *KBucket) remove(p peer.ID) bool {
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).ownerId == p {
+		if elem.Value.(*Contact).Node.SelfID == p {
 			kb.List.Remove(elem)
 			return true
 		}
@@ -80,7 +62,7 @@ func (kb *KBucket) Len() int {
 // MoveToFront
 func (kb *KBucket) MoveToFront(p peer.ID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).ownerId == p {
+		if elem.Value.(*Contact).Node.SelfID == p {
 			kb.List.MoveToFront(elem)
 		}
 	}
@@ -89,7 +71,7 @@ func (kb *KBucket) MoveToFront(p peer.ID) {
 // MoveToBack
 func (kb *KBucket) MoveToBack(p peer.ID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).ownerId == p {
+		if elem.Value.(*Contact).Node.SelfID == p {
 			kb.List.MoveToBack(elem)
 		}
 	}
@@ -115,7 +97,7 @@ func (kb *KBucket) Split(cpl int, target ID) *KBucket {
 
 	for elem != nil {
 
-		pId := elem.Value.(*Contact).Id
+		pId := elem.Value.(*Contact).Node.SelfKey
 		peerCpl := CommonPrefixLen(pId, target)
 		if peerCpl > cpl {
 
@@ -136,7 +118,7 @@ func (kb *KBucket) maxCommonPrefix(target ID) uint {
 
 	maxCpl := uint(0)
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Id, target))
+		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Node.SelfKey, target))
 		if cpl > maxCpl {
 			maxCpl = cpl
 		}

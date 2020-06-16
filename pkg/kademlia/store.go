@@ -6,12 +6,16 @@ import (
 )
 
 // Store
-func (n *FrisbeeNode) Store(ctx context.Context, reqBody *proto.StoreRequest) (*proto.Error, error) {
+func (n *FrisbeeDHT) Store(ctx context.Context, reqBody *proto.StoreRequest) (*proto.Error, error) {
 
 	return nil, nil
 }
 
 // Store
-func (n *FrisbeeNode) StoreRequest(ctx context.Context, addr string) {
+func (n *FrisbeeDHT) StoreRequest(ctx context.Context, addr string) {
+
+}
+
+func (n *FrisbeeDHT) iterativeStore() {
 
 }

@@ -2,15 +2,15 @@ syntax = "proto3";
 
 package models;
 
-service Frisbee {
+service FrisbeeProtocol {
 
-    rpc Ping(CheckStatusRequest) returns (CheckStatusReply) {};
+    rpc Ping(PingRequest) returns (PingReply) {};
 
     rpc Store(StoreRequest) returns (Error){};
 
-    rpc FindNode(ID) returns (NodeResponse) {};
+    rpc FindNode(ID) returns (ContactsResponse) {};
 
-    rpc FindValue(ID) returns (StorageResponse) {};
+    rpc FindValue(Key) returns (StorageResponse) {};
 
 }
 
@@ -21,26 +21,34 @@ message Node {
     string addr = 3;
 }
 
-message NodeResponse {
+message ContactsResponse {
     repeated Node nodes = 1;
 }
 
-message Error {}
+message Error {
+    string message = 1;
+}
+
+message Key {
+    bytes id = 1;
+}
 
 message ID {
     bytes id = 1;
 }
 
-message CheckStatusRequest{
+message PingRequest{
     string message = 1;
+    Node origin = 2;
 }
 
-message CheckStatusReply{
+message PingReply{
     string status = 1;
+    Error error = 2;
 }
 
 message StoreRequest {
-    string key = 1;
+    bytes key = 1;
     bytes content = 2;
 }
 

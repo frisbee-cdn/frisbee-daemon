@@ -2,7 +2,6 @@ package kbucket
 
 import (
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
-	model "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 	"time"
 )
 
@@ -32,7 +31,7 @@ func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*Routin
 }
 
 // Update is used to add a new FrisbeeNode inside the Routing Table
-func (rt *RoutingTable) Add(p peer.ID, node *model.Node, queryPeer bool, isReplaceable bool) (bool, error) {
+func (rt *RoutingTable) Add(p peer.ID, node *peer.Node, queryPeer bool, isReplaceable bool) (bool, error) {
 
 	bucketId := rt.bucketIdForPeer(p)
 	bucket := rt.KBuckets[bucketId]
@@ -57,7 +56,6 @@ func (rt *RoutingTable) Add(p peer.ID, node *model.Node, queryPeer bool, isRepla
 		if bucket.Len() < rt.bucketSize {
 			bucket.PushBack(&Contact{
 				Node:         node,
-				ownerId:      p,
 				LastUsefulAt: lastUsefulAt,
 				AddedAt:      now,
 				replaceable:  isReplaceable,

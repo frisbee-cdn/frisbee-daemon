@@ -7,25 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Mode describes what mode the DHT should operate in
-type ModeOpt int
-
-const (
-
-	// MODE_AUTO determines the mode on which the DHT should operate in, switch the DHT
-	// between Client and Server based on network conditions
-	MODE_AUTO ModeOpt = iota
-
-	// MODE_CLIENT operates the DHT as a client only, it cannot respond to incoming queries
-	MODE_CLIENT
-
-	// MODE_SERVER operates the DHT as a server, it ca both send and respond to queries
-	MODE_SERVER
-
-	// MODE_AUTO_SERVER operates in the same way as MODE_AUTO, but acts as a server when reachability is unknown
-	MODE_AUTO_SERVER
-)
-
 //Configuration is used to store our configuration constants
 type Configuration struct {
 	Server ServerConfiguration
@@ -33,10 +14,17 @@ type Configuration struct {
 	BucketSize int
 	HashSize   int
 
-	mode ModeOpt
+	IsBootstrap           bool
+	DefaultBootstrapPeers []ServerConfiguration
 
-	Timeout time.Duration
-	MaxIdle time.Duration
+	ParallelismDegree uint32
+	Timeout           time.Duration
+	MaxIdle           time.Duration
+
+	RepublishTimeout time.Duration
+	RefreshTimeout   time.Duration
+	ReplicateTimeout time.Duration
+	ExpireTimeout    time.Duration
 }
 
 // ServerConfiguration store server configuration details
@@ -52,11 +40,23 @@ var Defaults *Configuration = &Configuration{
 		Addr: "localhost",
 		Port: 8080,
 	},
+
+	DefaultBootstrapPeers: []ServerConfiguration{
+		{Addr: "127.0.0.1", Port: 5001},
+	},
 	BucketSize: 20,
 	HashSize:   160,
-	mode:       MODE_AUTO,
-	Timeout:    10 * time.Millisecond,
-	MaxIdle:    100 * time.Millisecond,
+
+	IsBootstrap:       false,
+	ParallelismDegree: 3,
+
+	Timeout: 10 * time.Millisecond,
+	MaxIdle: 100 * time.Millisecond,
+
+	RepublishTimeout: 86400 * time.Second,
+	RefreshTimeout:   3600 * time.Second,
+	ReplicateTimeout: 3600 * time.Second,
+	ExpireTimeout:    86400 * time.Second,
 }
 
 func readConfig(filename string, defaults map[string]interface{}) (*viper.Viper, error) {

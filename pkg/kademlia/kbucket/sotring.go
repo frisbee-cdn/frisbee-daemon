@@ -27,7 +27,7 @@ func (pds *peerDistanceSorter) Swap(a, b int) {
 func (pds *peerDistanceSorter) appendPeer(contact *Contact) {
 	pds.peers = append(pds.peers, peerDistance{
 		c:        contact,
-		distance: XOR(pds.target, contact.Id),
+		distance: XOR(pds.target, contact.Node.SelfKey),
 	})
 }
 

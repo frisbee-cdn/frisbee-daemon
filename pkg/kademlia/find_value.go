@@ -6,11 +6,15 @@ import (
 )
 
 // FindValue RPC Abstract Call
-func (n *FrisbeeNode) FindValue(ctx context.Context, reqBody *proto.ID) (*proto.StorageResponse, error) {
+func (n *FrisbeeDHT) FindValue(ctx context.Context, reqBody *proto.ID) (*proto.StorageResponse, error) {
 	return nil, nil
 }
 
 // FindValueRequest
-func (n *FrisbeeNode) FindValueRequest(ctx context.Context, addr string) {
+func (n *FrisbeeDHT) FindValueRequest(ctx context.Context, addr string) {
+
+}
+
+func (n *FrisbeeDHT) iterativeFindValue() {
 
 }

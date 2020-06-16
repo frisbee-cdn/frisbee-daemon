@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github/frisbee-cdn/frisbee-daemon/internal"
 	kb "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/kbucket"
 
 	config "github/frisbee-cdn/frisbee-daemon/internal"
@@ -19,18 +18,12 @@ import (
 
 var logger = log.New()
 
-//type mode int
-//
-//const (
-//	modeServer mode = iota + 1
-//	modeClient
-//)
+// FrisbeeDHT represents the node inside our network.
+type FrisbeeDHT struct {
+	// self node triplet
+	node *peer.Node
 
-// FrisbeeNode represents the node inside our network.
-type FrisbeeNode struct {
-	*proto.Node
-
-	self peer.ID
+	parallelismDegree uint32
 
 	cfg *config.Configuration
 
@@ -41,12 +34,10 @@ type FrisbeeNode struct {
 	ctx context.Context
 
 	routingTable *kb.RoutingTable
-
-	auto internal.ModeOpt
 }
 
 // New initializes the Frisbee Node
-func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode, error) {
+func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, error) {
 
 	var cfg *config.Configuration
 
@@ -56,24 +47,20 @@ func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode,
 		cfg = config.Defaults
 	}
 
-	node := &FrisbeeNode{
-		Node:      new(proto.Node),
-		cfg:       cfg,
-		createdAt: time.Now(),
-		self:      selfId,
+	dht := &FrisbeeDHT{
+		node:              peer.NewNode(cfg.Server.Addr, port, selfID),
+		parallelismDegree: cfg.ParallelismDegree,
+		cfg:               cfg,
+		createdAt:         time.Now(),
 	}
-
 	// Hash IP Address and create Identifier
-	id, err := kb.HashKey(node.self)
+	id, err := kb.HashKey(selfID)
 	if err != nil {
 		return nil, err
 	}
 
-	node.Id = id
-	node.Port = cfg.Server.Port
-	node.Addr = cfg.Server.Addr
-
-	node.routingTable, err = kb.NewRoutingTable(cfg.BucketSize, id, time.Minute)
+	dht.node.SelfKey = id
+	dht.routingTable, err = kb.NewRoutingTable(cfg.BucketSize, id, time.Minute)
 
 	if err != nil {
 		logger.Fatalf("Failed creating routing table: ", err)
@@ -85,34 +72,44 @@ func New(selfId peer.ID, port uint32, conf *config.Configuration) (*FrisbeeNode,
 		panic(err)
 	}
 
-	node.service = service
+	dht.service = service
 
-	proto.RegisterFrisbeeServer(node.service.GetServer(), node)
+	proto.RegisterFrisbeeServer(dht.service.GetServer(), dht)
 
 	// Start service connections
-	go node.service.Start()
+	go dht.service.Start()
 
-	logger.Infof("Peer %x just started listening on: %v:%v", node.Id, node.Addr, node.Port)
+	logger.Infof("Peer %x just started listening on: %v:%v", dht.node.SelfKey, dht.node.GetHostAddress(), dht.node.GetAddressPort())
 
-	return node, nil
+	return dht, nil
 }
 
-func (n *FrisbeeNode) Join(bootpNode string) {
+func (n *FrisbeeDHT) Join() {
 
-	// logger.Printf("Trying to connect to: %s:%d...", addr, port)
-	// client, err := n.service.Connect(fmt.Sprintf("%s:%d", addr, port))
-	// if err != nil {
-	// 	logger.Fatal("Failed to create client")
-	// }
-	// r, err := client.Ping(context.Background(), &proto.CheckStatusRequest{Message: "Ping"})
-	// if err != nil {
-	// 	logger.Fatalf("Node not alive: %v", err)
-	// }
-	// logger.Printf("Recevied from Bootstrap node: ", r.Status)
 }
 
-func (n *FrisbeeNode) shutdown() error {
+func (n *FrisbeeDHT) shutdown() error {
 	return nil
 }
 
 // RPC Interface Implementation
+// NodeLookup
+func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target kb.ID, addr string, done chan []*proto.Node) {
+
+	client, err := n.service.Connect(addr)
+	if err != nil {
+		done <- nil
+		return
+	}
+
+	r, err := client.FindNode(ctx, &proto.ID{Id: target})
+	if err != nil {
+		done <- nil
+		return
+	}
+
+	//TODO: Add Sender ID to routingTable
+	//n.routingTable.ADD(true, false)
+
+	done <- r.Nodes
+}
