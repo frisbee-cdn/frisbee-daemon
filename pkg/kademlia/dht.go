@@ -37,7 +37,7 @@ type FrisbeeDHT struct {
 }
 
 // New initializes the Frisbee Node
-func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, error) {
+func New(selfID peer.NodeID, port uint32, conf *config.Configuration) (*FrisbeeDHT, error) {
 
 	var cfg *config.Configuration
 
@@ -59,7 +59,7 @@ func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, 
 		return nil, err
 	}
 
-	dht.node.SelfKey = id
+	dht.node.ID = id
 	dht.routingTable, err = kb.NewRoutingTable(cfg.BucketSize, id, time.Minute)
 
 	if err != nil {
@@ -79,7 +79,7 @@ func New(selfID peer.ID, port uint32, conf *config.Configuration) (*FrisbeeDHT, 
 	// Start service connections
 	go dht.service.Start()
 
-	logger.Infof("Peer %x just started listening on: %v:%v", dht.node.SelfKey, dht.node.GetHostAddress(), dht.node.GetAddressPort())
+	logger.Infof("Peer %x just started listening on: %v:%v", dht.node.ID, dht.node.GetHostAddress(), dht.node.GetAddressPort())
 
 	return dht, nil
 }
@@ -113,7 +113,7 @@ func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target kb.ID, addr string, 
 		return
 	}
 
-	r, err := client.FindNode(ctx, &proto.ID{Id: target})
+	r, err := client.FindNode(ctx, &proto.FindNodeRequest{Id: target})
 	if err != nil {
 		done <- nil
 		return

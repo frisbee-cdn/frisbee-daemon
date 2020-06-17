@@ -33,8 +33,8 @@ func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*Routin
 // Update is used to add a new FrisbeeNode inside the Routing Table
 func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool) (bool, error) {
 
-	bucketId := rt.bucketIdForPeer(node.SelfID)
-	bucket := rt.KBuckets[bucketId]
+	bucketID := rt.bucketIdForPeer(node.StringRepr)
+	bucket := rt.KBuckets[bucketID]
 
 	now := time.Now()
 	var lastUsefulAt time.Time
@@ -43,23 +43,18 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 	}
 
 	// peer already exists in the Routing TAble
-	if peer := bucket.find(node.SelfID); peer != nil {
+	if peer := bucket.find(node.StringRepr); peer != nil {
 
 		if peer.LastUsefulAt.IsZero() && queryPeer {
 			peer.LastUsefulAt = lastUsefulAt
 		}
 
-		bucket.MoveToBack(node.SelfID)
+		bucket.MoveToBack(node.StringRepr)
 		return true, nil
 	} else {
-
+		contact := NewContact(node, lastUsefulAt, now, isReplaceable)
 		if bucket.Len() < rt.bucketSize {
-			bucket.PushBack(&Contact{
-				Node:         node,
-				LastUsefulAt: lastUsefulAt,
-				AddedAt:      now,
-				replaceable:  isReplaceable,
-			})
+			bucket.PushBack(contact)
 			return true, nil
 		} else {
 
@@ -69,7 +64,7 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 }
 
 // Remove is used to delete a FrisbeeNode inside the Routing Table
-func (rt *RoutingTable) Remove(p peer.ID) bool {
+func (rt *RoutingTable) Remove(p peer.NodeID) bool {
 
 	bucketID := rt.bucketIdForPeer(p)
 	bucket := rt.KBuckets[bucketID]
@@ -168,7 +163,7 @@ func (rt *RoutingTable) nextBucket() {
 
 }
 
-func (rt *RoutingTable) bucketIdForPeer(p peer.ID) int {
+func (rt *RoutingTable) bucketIdForPeer(p peer.NodeID) int {
 
 	peerID, _ := HashKey(p)
 	cpl := CommonPrefixLen(peerID, rt.local)

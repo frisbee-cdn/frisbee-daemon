@@ -7,7 +7,7 @@ import (
 )
 
 // FindNode RPC Abstract Call
-func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.ID) (*proto.ContactsResponse, error) {
+func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.FindNodeRequest) (*proto.FindNodeReply, error) {
 
 	senderID := reqBody.Id
 	logger.Info("FindNode Called by sender with ID: %x", senderID)
@@ -15,13 +15,13 @@ func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.ID) (*proto.Co
 	closestPeers := n.routingTable.FindClosestPeers(senderID, n.cfg.BucketSize)
 	for _, p := range closestPeers {
 		res = append(res, &proto.Node{
-			Id:   p.Node.SelfKey,
+			Id:   p.Node.ID,
 			Addr: p.Node.GetHostAddress(),
 			Port: p.Node.GetAddressPort(),
 		})
 	}
 	logger.Infof("Succesfully found %d closest peers from the senders ID", len(closestPeers))
-	return &proto.ContactsResponse{Nodes: res}, nil
+	return &proto.FindNodeReply{Nodes: res}, nil
 }
 
 // FindNodeRequest
@@ -32,7 +32,7 @@ func (n *FrisbeeDHT) FindNodeRequest(ctx context.Context, target kb.ID, addr str
 		return nil, err
 	}
 
-	r, err := client.FindNode(ctx, &proto.ID{Id: target})
+	r, err := client.FindNode(ctx, &proto.FindNodeRequest{Id: target})
 	if err != nil {
 		return nil, err
 	}

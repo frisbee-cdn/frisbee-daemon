@@ -11,6 +11,9 @@ func main() {
 	node, _ := kademlia.New("SanFrancisco-FirstNode", 5001, nil)
 	print(node)
 
+	// node1, _ := kademlia.New("SanFrancisco-SecondNode", 5002, nil)
+	// print(node1)
+
 	// time.Sleep(2 * time.Second)
 	// node1, _ := kademlia.New("Romania", 5002, nil)
 

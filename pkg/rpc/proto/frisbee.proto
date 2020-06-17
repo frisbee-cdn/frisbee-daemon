@@ -8,9 +8,9 @@ service FrisbeeProtocol {
 
     rpc Store(StoreRequest) returns (Error){};
 
-    rpc FindNode(ID) returns (ContactsResponse) {};
+    rpc FindNode(FindNodeRequest) returns (FindNodeReply) {};
 
-    rpc FindValue(Key) returns (StorageResponse) {};
+    rpc FindValue(FindValueRequest) returns (FindValueReply) {};
 
 }
 
@@ -21,16 +21,24 @@ message Node {
     string addr = 3;
 }
 
-message ContactsResponse {
-    repeated Node nodes = 1;
-}
-
 message Error {
     string message = 1;
 }
 
-message Key {
+message FindValueRequest {
+    bytes key = 1;
+}
+
+message FindValueReply {
+    bytes content = 1;
+}
+
+message FindNodeRequest {
     bytes id = 1;
+}
+
+message FindNodeReply {
+    repeated Node nodes = 1;
 }
 
 message ID {
@@ -52,6 +60,3 @@ message StoreRequest {
     bytes content = 2;
 }
 
-message StorageResponse {
-    bytes content = 1;
-}

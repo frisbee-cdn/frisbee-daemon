@@ -80,45 +80,6 @@ func (m *Node) GetAddr() string {
 	return ""
 }
 
-type ContactsResponse struct {
-	Nodes                []*Node  `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ContactsResponse) Reset()         { *m = ContactsResponse{} }
-func (m *ContactsResponse) String() string { return proto.CompactTextString(m) }
-func (*ContactsResponse) ProtoMessage()    {}
-func (*ContactsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{1}
-}
-
-func (m *ContactsResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ContactsResponse.Unmarshal(m, b)
-}
-func (m *ContactsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ContactsResponse.Marshal(b, m, deterministic)
-}
-func (m *ContactsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ContactsResponse.Merge(m, src)
-}
-func (m *ContactsResponse) XXX_Size() int {
-	return xxx_messageInfo_ContactsResponse.Size(m)
-}
-func (m *ContactsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ContactsResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ContactsResponse proto.InternalMessageInfo
-
-func (m *ContactsResponse) GetNodes() []*Node {
-	if m != nil {
-		return m.Nodes
-	}
-	return nil
-}
-
 type Error struct {
 	Message              string   `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -130,7 +91,7 @@ func (m *Error) Reset()         { *m = Error{} }
 func (m *Error) String() string { return proto.CompactTextString(m) }
 func (*Error) ProtoMessage()    {}
 func (*Error) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{2}
+	return fileDescriptor_ede8bc4112172419, []int{1}
 }
 
 func (m *Error) XXX_Unmarshal(b []byte) error {
@@ -158,41 +119,158 @@ func (m *Error) GetMessage() string {
 	return ""
 }
 
-type Key struct {
+type FindValueRequest struct {
+	Key                  []byte   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindValueRequest) Reset()         { *m = FindValueRequest{} }
+func (m *FindValueRequest) String() string { return proto.CompactTextString(m) }
+func (*FindValueRequest) ProtoMessage()    {}
+func (*FindValueRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{2}
+}
+
+func (m *FindValueRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindValueRequest.Unmarshal(m, b)
+}
+func (m *FindValueRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindValueRequest.Marshal(b, m, deterministic)
+}
+func (m *FindValueRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindValueRequest.Merge(m, src)
+}
+func (m *FindValueRequest) XXX_Size() int {
+	return xxx_messageInfo_FindValueRequest.Size(m)
+}
+func (m *FindValueRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindValueRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindValueRequest proto.InternalMessageInfo
+
+func (m *FindValueRequest) GetKey() []byte {
+	if m != nil {
+		return m.Key
+	}
+	return nil
+}
+
+type FindValueReply struct {
+	Content              []byte   `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindValueReply) Reset()         { *m = FindValueReply{} }
+func (m *FindValueReply) String() string { return proto.CompactTextString(m) }
+func (*FindValueReply) ProtoMessage()    {}
+func (*FindValueReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{3}
+}
+
+func (m *FindValueReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindValueReply.Unmarshal(m, b)
+}
+func (m *FindValueReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindValueReply.Marshal(b, m, deterministic)
+}
+func (m *FindValueReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindValueReply.Merge(m, src)
+}
+func (m *FindValueReply) XXX_Size() int {
+	return xxx_messageInfo_FindValueReply.Size(m)
+}
+func (m *FindValueReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindValueReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindValueReply proto.InternalMessageInfo
+
+func (m *FindValueReply) GetContent() []byte {
+	if m != nil {
+		return m.Content
+	}
+	return nil
+}
+
+type FindNodeRequest struct {
 	Id                   []byte   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Key) Reset()         { *m = Key{} }
-func (m *Key) String() string { return proto.CompactTextString(m) }
-func (*Key) ProtoMessage()    {}
-func (*Key) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{3}
+func (m *FindNodeRequest) Reset()         { *m = FindNodeRequest{} }
+func (m *FindNodeRequest) String() string { return proto.CompactTextString(m) }
+func (*FindNodeRequest) ProtoMessage()    {}
+func (*FindNodeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{4}
 }
 
-func (m *Key) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Key.Unmarshal(m, b)
+func (m *FindNodeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindNodeRequest.Unmarshal(m, b)
 }
-func (m *Key) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Key.Marshal(b, m, deterministic)
+func (m *FindNodeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindNodeRequest.Marshal(b, m, deterministic)
 }
-func (m *Key) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Key.Merge(m, src)
+func (m *FindNodeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindNodeRequest.Merge(m, src)
 }
-func (m *Key) XXX_Size() int {
-	return xxx_messageInfo_Key.Size(m)
+func (m *FindNodeRequest) XXX_Size() int {
+	return xxx_messageInfo_FindNodeRequest.Size(m)
 }
-func (m *Key) XXX_DiscardUnknown() {
-	xxx_messageInfo_Key.DiscardUnknown(m)
+func (m *FindNodeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindNodeRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Key proto.InternalMessageInfo
+var xxx_messageInfo_FindNodeRequest proto.InternalMessageInfo
 
-func (m *Key) GetId() []byte {
+func (m *FindNodeRequest) GetId() []byte {
 	if m != nil {
 		return m.Id
+	}
+	return nil
+}
+
+type FindNodeReply struct {
+	Nodes                []*Node  `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindNodeReply) Reset()         { *m = FindNodeReply{} }
+func (m *FindNodeReply) String() string { return proto.CompactTextString(m) }
+func (*FindNodeReply) ProtoMessage()    {}
+func (*FindNodeReply) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ede8bc4112172419, []int{5}
+}
+
+func (m *FindNodeReply) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindNodeReply.Unmarshal(m, b)
+}
+func (m *FindNodeReply) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindNodeReply.Marshal(b, m, deterministic)
+}
+func (m *FindNodeReply) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindNodeReply.Merge(m, src)
+}
+func (m *FindNodeReply) XXX_Size() int {
+	return xxx_messageInfo_FindNodeReply.Size(m)
+}
+func (m *FindNodeReply) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindNodeReply.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindNodeReply proto.InternalMessageInfo
+
+func (m *FindNodeReply) GetNodes() []*Node {
+	if m != nil {
+		return m.Nodes
 	}
 	return nil
 }
@@ -208,7 +286,7 @@ func (m *ID) Reset()         { *m = ID{} }
 func (m *ID) String() string { return proto.CompactTextString(m) }
 func (*ID) ProtoMessage()    {}
 func (*ID) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{4}
+	return fileDescriptor_ede8bc4112172419, []int{6}
 }
 
 func (m *ID) XXX_Unmarshal(b []byte) error {
@@ -248,7 +326,7 @@ func (m *PingRequest) Reset()         { *m = PingRequest{} }
 func (m *PingRequest) String() string { return proto.CompactTextString(m) }
 func (*PingRequest) ProtoMessage()    {}
 func (*PingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{5}
+	return fileDescriptor_ede8bc4112172419, []int{7}
 }
 
 func (m *PingRequest) XXX_Unmarshal(b []byte) error {
@@ -295,7 +373,7 @@ func (m *PingReply) Reset()         { *m = PingReply{} }
 func (m *PingReply) String() string { return proto.CompactTextString(m) }
 func (*PingReply) ProtoMessage()    {}
 func (*PingReply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{6}
+	return fileDescriptor_ede8bc4112172419, []int{8}
 }
 
 func (m *PingReply) XXX_Unmarshal(b []byte) error {
@@ -342,7 +420,7 @@ func (m *StoreRequest) Reset()         { *m = StoreRequest{} }
 func (m *StoreRequest) String() string { return proto.CompactTextString(m) }
 func (*StoreRequest) ProtoMessage()    {}
 func (*StoreRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{7}
+	return fileDescriptor_ede8bc4112172419, []int{9}
 }
 
 func (m *StoreRequest) XXX_Unmarshal(b []byte) error {
@@ -377,55 +455,17 @@ func (m *StoreRequest) GetContent() []byte {
 	return nil
 }
 
-type StorageResponse struct {
-	Content              []byte   `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *StorageResponse) Reset()         { *m = StorageResponse{} }
-func (m *StorageResponse) String() string { return proto.CompactTextString(m) }
-func (*StorageResponse) ProtoMessage()    {}
-func (*StorageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ede8bc4112172419, []int{8}
-}
-
-func (m *StorageResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_StorageResponse.Unmarshal(m, b)
-}
-func (m *StorageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_StorageResponse.Marshal(b, m, deterministic)
-}
-func (m *StorageResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StorageResponse.Merge(m, src)
-}
-func (m *StorageResponse) XXX_Size() int {
-	return xxx_messageInfo_StorageResponse.Size(m)
-}
-func (m *StorageResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_StorageResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_StorageResponse proto.InternalMessageInfo
-
-func (m *StorageResponse) GetContent() []byte {
-	if m != nil {
-		return m.Content
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*Node)(nil), "models.Node")
-	proto.RegisterType((*ContactsResponse)(nil), "models.ContactsResponse")
 	proto.RegisterType((*Error)(nil), "models.Error")
-	proto.RegisterType((*Key)(nil), "models.Key")
+	proto.RegisterType((*FindValueRequest)(nil), "models.FindValueRequest")
+	proto.RegisterType((*FindValueReply)(nil), "models.FindValueReply")
+	proto.RegisterType((*FindNodeRequest)(nil), "models.FindNodeRequest")
+	proto.RegisterType((*FindNodeReply)(nil), "models.FindNodeReply")
 	proto.RegisterType((*ID)(nil), "models.ID")
 	proto.RegisterType((*PingRequest)(nil), "models.PingRequest")
 	proto.RegisterType((*PingReply)(nil), "models.PingReply")
 	proto.RegisterType((*StoreRequest)(nil), "models.StoreRequest")
-	proto.RegisterType((*StorageResponse)(nil), "models.StorageResponse")
 }
 
 func init() {
@@ -433,32 +473,32 @@ func init() {
 }
 
 var fileDescriptor_ede8bc4112172419 = []byte{
-	// 395 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0x4d, 0x6f, 0xd4, 0x30,
-	0x10, 0xdd, 0xec, 0x17, 0xec, 0x6c, 0x96, 0x96, 0xa1, 0x40, 0x94, 0x53, 0x30, 0x1c, 0x22, 0x21,
-	0x45, 0x68, 0x2b, 0x71, 0xe0, 0xc0, 0x85, 0x52, 0x51, 0x55, 0xa0, 0xca, 0x48, 0xdc, 0xd3, 0xf5,
-	0x10, 0x45, 0x64, 0xed, 0x60, 0x7b, 0x0f, 0xf9, 0xaf, 0xfc, 0x18, 0x64, 0x27, 0x46, 0xd9, 0x45,
-	0xbd, 0xcd, 0xcc, 0x1b, 0xbf, 0x79, 0x6f, 0x3c, 0xb0, 0xf9, 0xa9, 0x6b, 0x73, 0x4f, 0x54, 0xb4,
-	0x5a, 0x59, 0x85, 0xcb, 0xbd, 0x12, 0xd4, 0x18, 0xf6, 0x11, 0xe6, 0xdf, 0x94, 0x20, 0x7c, 0x02,
-	0xd3, 0x5a, 0x24, 0x51, 0x16, 0xe5, 0x31, 0x9f, 0xd6, 0x02, 0x11, 0xe6, 0xad, 0xd2, 0x36, 0x99,
-	0x66, 0x51, 0xbe, 0xe1, 0x3e, 0x76, 0xb5, 0x52, 0x08, 0x9d, 0xcc, 0xb2, 0x28, 0x5f, 0x71, 0x1f,
-	0xb3, 0xf7, 0x70, 0xfe, 0x49, 0x49, 0x5b, 0xee, 0xac, 0xe1, 0x64, 0x5a, 0x25, 0x0d, 0x21, 0x83,
-	0x85, 0x54, 0x82, 0x4c, 0x12, 0x65, 0xb3, 0x7c, 0xbd, 0x8d, 0x8b, 0x7e, 0x56, 0xe1, 0x06, 0xf1,
-	0x1e, 0x62, 0xaf, 0x60, 0xf1, 0x59, 0x6b, 0xa5, 0x31, 0x81, 0x47, 0x7b, 0x32, 0xa6, 0xac, 0xc8,
-	0x4f, 0x5f, 0xf1, 0x90, 0xb2, 0xe7, 0x30, 0xbb, 0xa5, 0xee, 0x54, 0x19, 0xbb, 0x80, 0xe9, 0xcd,
-	0xd5, 0x7f, 0xd5, 0xaf, 0xb0, 0xbe, 0xab, 0x65, 0xc5, 0xe9, 0xf7, 0x81, 0x8c, 0x7d, 0x98, 0x15,
-	0xdf, 0xc0, 0x52, 0xe9, 0xba, 0xaa, 0xa5, 0xb7, 0x76, 0xaa, 0x6e, 0xc0, 0xd8, 0x17, 0x58, 0xf5,
-	0x74, 0x6d, 0xd3, 0xe1, 0x0b, 0x58, 0x1a, 0x5b, 0xda, 0x83, 0x19, 0xb8, 0x86, 0x0c, 0x5f, 0xc3,
-	0x82, 0x9c, 0x87, 0x81, 0x69, 0x13, 0x98, 0xbc, 0x31, 0xde, 0x63, 0xec, 0x03, 0xc4, 0xdf, 0xad,
-	0xd2, 0x14, 0x94, 0x9d, 0xc3, 0xec, 0x17, 0x75, 0x83, 0x72, 0x17, 0x3a, 0xad, 0x3b, 0x25, 0x2d,
-	0xc9, 0x7e, 0xdb, 0x31, 0x0f, 0x29, 0x7b, 0x0b, 0x67, 0xee, 0x6d, 0x59, 0xd1, 0xbf, 0xdd, 0x8e,
-	0x9a, 0xa3, 0xa3, 0xe6, 0xed, 0x9f, 0x08, 0xce, 0xae, 0xfb, 0x3f, 0xbe, 0x73, 0x5f, 0xbc, 0x53,
-	0x0d, 0xbe, 0x83, 0xb9, 0xb3, 0x81, 0xcf, 0x82, 0xb4, 0xd1, 0x8e, 0xd2, 0xa7, 0xc7, 0xc5, 0xb6,
-	0xe9, 0xd8, 0x04, 0x0b, 0x58, 0x78, 0xb9, 0x78, 0x11, 0xd0, 0xb1, 0xfa, 0xf4, 0xd8, 0x23, 0x9b,
-	0xe0, 0x16, 0x1e, 0x5f, 0xd7, 0x52, 0xf8, 0x1b, 0x82, 0x00, 0xde, 0x5c, 0xa5, 0x49, 0x88, 0x4f,
-	0xaf, 0x83, 0x4d, 0xf0, 0x12, 0x56, 0xee, 0xcd, 0x8f, 0xb2, 0x39, 0x10, 0xae, 0x43, 0xe3, 0x2d,
-	0x75, 0xe9, 0xcb, 0xf1, 0xd0, 0x91, 0x6d, 0x36, 0xb9, 0x5f, 0xfa, 0xbb, 0xbd, 0xfc, 0x1b, 0x00,
-	0x00, 0xff, 0xff, 0x4d, 0x6e, 0xa2, 0x98, 0xc8, 0x02, 0x00, 0x00,
+	// 388 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0x41, 0x6f, 0xda, 0x30,
+	0x18, 0x25, 0x81, 0x64, 0xcb, 0x07, 0x01, 0xe6, 0x31, 0x16, 0xe5, 0x14, 0x3c, 0x0e, 0xd1, 0x0e,
+	0xd1, 0x04, 0xb7, 0x69, 0xda, 0x2e, 0x1b, 0xda, 0x0e, 0xab, 0x50, 0x2a, 0xf5, 0x1e, 0xb0, 0x8b,
+	0xa2, 0x86, 0x38, 0xb5, 0xcd, 0x81, 0xbf, 0xdd, 0x5f, 0x50, 0xd9, 0x89, 0xdb, 0x00, 0xe5, 0xe6,
+	0xcf, 0xef, 0xe9, 0x7d, 0xcf, 0xcf, 0x0f, 0xfc, 0x7b, 0x9e, 0x8b, 0x0d, 0xa5, 0x49, 0xc5, 0x99,
+	0x64, 0xc8, 0xdd, 0x33, 0x42, 0x0b, 0x81, 0x7f, 0x42, 0xef, 0x86, 0x11, 0x8a, 0x86, 0x60, 0xe7,
+	0x24, 0xb0, 0x22, 0x2b, 0x1e, 0xa4, 0x76, 0x4e, 0x10, 0x82, 0x5e, 0xc5, 0xb8, 0x0c, 0xec, 0xc8,
+	0x8a, 0xfd, 0x54, 0x9f, 0xd5, 0x5d, 0x46, 0x08, 0x0f, 0xba, 0x91, 0x15, 0x7b, 0xa9, 0x3e, 0xe3,
+	0x19, 0x38, 0x7f, 0x38, 0x67, 0x1c, 0x05, 0xf0, 0x6e, 0x4f, 0x85, 0xc8, 0x76, 0x54, 0xab, 0x78,
+	0xa9, 0x19, 0xf1, 0x1c, 0xc6, 0xab, 0xbc, 0x24, 0x77, 0x59, 0x71, 0xa0, 0x29, 0x7d, 0x3c, 0x50,
+	0x21, 0xd1, 0x18, 0xba, 0x0f, 0xf4, 0xd8, 0xec, 0x53, 0x47, 0xfc, 0x15, 0x86, 0x2d, 0x56, 0x55,
+	0x1c, 0x95, 0xe2, 0x96, 0x95, 0x92, 0x96, 0xb2, 0xe1, 0x99, 0x11, 0xcf, 0x60, 0xa4, 0xb8, 0xca,
+	0xb8, 0x11, 0x3c, 0xf3, 0x8f, 0x97, 0xe0, 0xbf, 0x52, 0x94, 0x1a, 0x06, 0xa7, 0x64, 0x84, 0x8a,
+	0xc0, 0x8a, 0xba, 0x71, 0x7f, 0x31, 0x48, 0xea, 0x00, 0x12, 0xcd, 0xa8, 0x21, 0x3c, 0x01, 0xfb,
+	0xdf, 0xef, 0x0b, 0xa9, 0xff, 0xd0, 0x5f, 0xe7, 0xe5, 0xce, 0x6c, 0xba, 0xfa, 0x50, 0x34, 0x07,
+	0x97, 0xf1, 0x7c, 0x97, 0x97, 0x3a, 0xb5, 0xf3, 0x1d, 0x0d, 0x86, 0xff, 0x82, 0x57, 0xcb, 0x29,
+	0x57, 0x53, 0x70, 0x85, 0xcc, 0xe4, 0x41, 0x34, 0x5a, 0xcd, 0x84, 0xbe, 0x80, 0x43, 0x55, 0xac,
+	0x8d, 0x92, 0x6f, 0x94, 0x74, 0xd6, 0x69, 0x8d, 0xe1, 0xef, 0x30, 0xb8, 0x95, 0x8c, 0x5f, 0x0f,
+	0xb5, 0x1d, 0xa1, 0x7d, 0x12, 0xe1, 0xe2, 0xc9, 0x82, 0xd1, 0xaa, 0x6e, 0xc4, 0x5a, 0x15, 0x62,
+	0xcb, 0x0a, 0xf4, 0x0d, 0x7a, 0xca, 0x19, 0xfa, 0x68, 0xb6, 0xb5, 0x9e, 0x1d, 0x7e, 0x38, 0xbd,
+	0xac, 0x8a, 0x23, 0xee, 0xa0, 0x04, 0x1c, 0xed, 0x00, 0x4d, 0x0c, 0xda, 0x36, 0x14, 0x9e, 0xda,
+	0xc6, 0x1d, 0xf4, 0x03, 0xde, 0x9b, 0x5f, 0x41, 0x9f, 0x0d, 0x78, 0xf6, 0x95, 0xe1, 0xa7, 0x4b,
+	0xa0, 0xde, 0xf6, 0x0b, 0xbc, 0x97, 0x8a, 0xa0, 0xa0, 0xcd, 0x6a, 0x77, 0x2b, 0x9c, 0xbe, 0x81,
+	0x68, 0x81, 0x8d, 0xab, 0xbb, 0xbf, 0x7c, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x0b, 0xd0, 0x47, 0x45,
+	0x0c, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -475,8 +515,8 @@ const _ = grpc.SupportPackageIsVersion6
 type FrisbeeProtocolClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
 	Store(ctx context.Context, in *StoreRequest, opts ...grpc.CallOption) (*Error, error)
-	FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ContactsResponse, error)
-	FindValue(ctx context.Context, in *Key, opts ...grpc.CallOption) (*StorageResponse, error)
+	FindNode(ctx context.Context, in *FindNodeRequest, opts ...grpc.CallOption) (*FindNodeReply, error)
+	FindValue(ctx context.Context, in *FindValueRequest, opts ...grpc.CallOption) (*FindValueReply, error)
 }
 
 type frisbeeProtocolClient struct {
@@ -505,8 +545,8 @@ func (c *frisbeeProtocolClient) Store(ctx context.Context, in *StoreRequest, opt
 	return out, nil
 }
 
-func (c *frisbeeProtocolClient) FindNode(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ContactsResponse, error) {
-	out := new(ContactsResponse)
+func (c *frisbeeProtocolClient) FindNode(ctx context.Context, in *FindNodeRequest, opts ...grpc.CallOption) (*FindNodeReply, error) {
+	out := new(FindNodeReply)
 	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/FindNode", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -514,8 +554,8 @@ func (c *frisbeeProtocolClient) FindNode(ctx context.Context, in *ID, opts ...gr
 	return out, nil
 }
 
-func (c *frisbeeProtocolClient) FindValue(ctx context.Context, in *Key, opts ...grpc.CallOption) (*StorageResponse, error) {
-	out := new(StorageResponse)
+func (c *frisbeeProtocolClient) FindValue(ctx context.Context, in *FindValueRequest, opts ...grpc.CallOption) (*FindValueReply, error) {
+	out := new(FindValueReply)
 	err := c.cc.Invoke(ctx, "/models.FrisbeeProtocol/FindValue", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -527,8 +567,8 @@ func (c *frisbeeProtocolClient) FindValue(ctx context.Context, in *Key, opts ...
 type FrisbeeProtocolServer interface {
 	Ping(context.Context, *PingRequest) (*PingReply, error)
 	Store(context.Context, *StoreRequest) (*Error, error)
-	FindNode(context.Context, *ID) (*ContactsResponse, error)
-	FindValue(context.Context, *Key) (*StorageResponse, error)
+	FindNode(context.Context, *FindNodeRequest) (*FindNodeReply, error)
+	FindValue(context.Context, *FindValueRequest) (*FindValueReply, error)
 }
 
 // UnimplementedFrisbeeProtocolServer can be embedded to have forward compatible implementations.
@@ -541,10 +581,10 @@ func (*UnimplementedFrisbeeProtocolServer) Ping(ctx context.Context, req *PingRe
 func (*UnimplementedFrisbeeProtocolServer) Store(ctx context.Context, req *StoreRequest) (*Error, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Store not implemented")
 }
-func (*UnimplementedFrisbeeProtocolServer) FindNode(ctx context.Context, req *ID) (*ContactsResponse, error) {
+func (*UnimplementedFrisbeeProtocolServer) FindNode(ctx context.Context, req *FindNodeRequest) (*FindNodeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindNode not implemented")
 }
-func (*UnimplementedFrisbeeProtocolServer) FindValue(ctx context.Context, req *Key) (*StorageResponse, error) {
+func (*UnimplementedFrisbeeProtocolServer) FindValue(ctx context.Context, req *FindValueRequest) (*FindValueReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindValue not implemented")
 }
 
@@ -589,7 +629,7 @@ func _FrisbeeProtocol_Store_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _FrisbeeProtocol_FindNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
+	in := new(FindNodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -601,13 +641,13 @@ func _FrisbeeProtocol_FindNode_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/models.FrisbeeProtocol/FindNode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeProtocolServer).FindNode(ctx, req.(*ID))
+		return srv.(FrisbeeProtocolServer).FindNode(ctx, req.(*FindNodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _FrisbeeProtocol_FindValue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Key)
+	in := new(FindValueRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -619,7 +659,7 @@ func _FrisbeeProtocol_FindValue_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/models.FrisbeeProtocol/FindValue",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FrisbeeProtocolServer).FindValue(ctx, req.(*Key))
+		return srv.(FrisbeeProtocolServer).FindValue(ctx, req.(*FindValueRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

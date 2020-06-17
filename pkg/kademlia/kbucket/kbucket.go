@@ -32,9 +32,9 @@ func (kb *KBucket) GetAllPeers() []Contact {
 
 // find returns the kbucket with the given Id if it exists
 // returns nil if the peerId does not exist in the kBucket
-func (kb *KBucket) find(p peer.ID) *Contact {
+func (kb *KBucket) find(p peer.NodeID) *Contact {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.SelfID == p {
+		if elem.Value.(*Contact).Node.StringRepr == p {
 			return elem.Value.(*Contact)
 		}
 	}
@@ -43,10 +43,10 @@ func (kb *KBucket) find(p peer.ID) *Contact {
 
 // remove deletes the kbucket with the given Id it exists and returns true
 // returns false if the kbucket does not exist in the kBucket
-func (kb *KBucket) remove(p peer.ID) bool {
+func (kb *KBucket) remove(p peer.NodeID) bool {
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.SelfID == p {
+		if elem.Value.(*Contact).Node.StringRepr == p {
 			kb.List.Remove(elem)
 			return true
 		}
@@ -60,18 +60,18 @@ func (kb *KBucket) Len() int {
 }
 
 // MoveToFront
-func (kb *KBucket) MoveToFront(p peer.ID) {
+func (kb *KBucket) MoveToFront(p peer.NodeID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.SelfID == p {
+		if elem.Value.(*Contact).Node.StringRepr == p {
 			kb.List.MoveToFront(elem)
 		}
 	}
 }
 
 // MoveToBack
-func (kb *KBucket) MoveToBack(p peer.ID) {
+func (kb *KBucket) MoveToBack(p peer.NodeID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.SelfID == p {
+		if elem.Value.(*Contact).Node.StringRepr == p {
 			kb.List.MoveToBack(elem)
 		}
 	}
@@ -97,7 +97,7 @@ func (kb *KBucket) Split(cpl int, target ID) *KBucket {
 
 	for elem != nil {
 
-		pId := elem.Value.(*Contact).Node.SelfKey
+		pId := elem.Value.(*Contact).Node.ID
 		peerCpl := CommonPrefixLen(pId, target)
 		if peerCpl > cpl {
 
@@ -118,7 +118,7 @@ func (kb *KBucket) maxCommonPrefix(target ID) uint {
 
 	maxCpl := uint(0)
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Node.SelfKey, target))
+		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Node.ID, target))
 		if cpl > maxCpl {
 			maxCpl = cpl
 		}

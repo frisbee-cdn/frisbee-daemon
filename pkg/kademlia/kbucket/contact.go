@@ -15,5 +15,15 @@ type Contact struct {
 	AddedAt time.Time
 
 	// if a bucket is full, this peer can be replaced to make space for a new peer.
-	replaceable bool
+	Replaceable bool
+}
+
+// NewContact creates a new Contact
+func NewContact(node *peer.Node, lastUsefulAt time.Time, addedAt time.Time, replaceable bool) *Contact {
+	return &Contact{
+		Node:         node,
+		LastUsefulAt: lastUsefulAt,
+		AddedAt:      addedAt,
+		Replaceable:  replaceable,
+	}
 }
