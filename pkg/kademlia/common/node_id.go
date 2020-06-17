@@ -10,7 +10,7 @@ import (
 type NodeID []byte
 
 // HashKey used to hash the key
-func HashKey(id ID) (NodeID, error) {
+func HashKey(id string) (NodeID, error) {
 
 	h := sha1.New()
 

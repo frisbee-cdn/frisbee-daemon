@@ -1,34 +1,27 @@
 package main
 
 import (
+	"flag"
 	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia"
+
+	//"github/frisbee-cdn/frisbee-daemon/pkg/kademlia"
 )
 
 func main() {
 
 	// cfg := config.InitConfiguration("development")
 
-	node, _ := kademlia.New("SanFrancisco-FirstNode", 5001, nil)
-	print(node)
+	//node, _ := kademlia.New("SanFrancisco-FirstNode", 5001, nil)
+	//print(node)
+	//
 
-	// node1, _ := kademlia.New("SanFrancisco-SecondNode", 5002, nil)
-	// print(node1)
+	host := flag.String("host","name", "a string")
+	port := flag.Int("port", 8888, "an int")
+	isBootstrap := flag.Bool("boot", false, "a bool")
 
-	// time.Sleep(2 * time.Second)
-	// node1, _ := kademlia.New("Romania", 5002, nil)
+	flag.Parse()
 
-	// node1.Join(node.Addr, node.Port)
-
-	// id1, _ := peer.HashKey("192")
-	// id2, _ := peer.HashKey("440")
-
-	// fmt.Printf("Haskeys: \n {%v} \n {%v}", id1, id2)
-
-	// dist := peer.XOR(id1, id2)
-	// fmt.Printf("\nDistance {%v}", dist)
-
-	// leadingZeros := peer.ZeroPrefixLen(dist)
-
-	// fmt.Printf("Peer: {%v}", leadingZeros)
-
+	kademlia.Bootstrap(*host, uint32(*port), *isBootstrap)
+	done := make(chan bool)
+	_ = <- done
 }

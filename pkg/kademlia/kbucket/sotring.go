@@ -3,16 +3,18 @@ package kbucket
 import (
 	"container/list"
 	"sort"
+
+	id "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 )
 
 type peerDistance struct {
 	c        *Contact
-	distance ID
+	distance id.NodeID
 }
 
 type peerDistanceSorter struct {
 	peers  []peerDistance
-	target ID
+	target id.NodeID
 }
 
 func (pds *peerDistanceSorter) Less(i, j int) bool {
@@ -27,7 +29,7 @@ func (pds *peerDistanceSorter) Swap(a, b int) {
 func (pds *peerDistanceSorter) appendPeer(contact *Contact) {
 	pds.peers = append(pds.peers, peerDistance{
 		c:        contact,
-		distance: XOR(pds.target, contact.Node.ID),
+		distance: id.XOR(pds.target, contact.Node.ID),
 	})
 }
 

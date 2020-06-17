@@ -2,6 +2,7 @@ package kademlia
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	kb "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/kbucket"
@@ -23,6 +24,8 @@ type FrisbeeDHT struct {
 	// self node triplet
 	node *peer.Node
 
+	StringRepr     string
+
 	parallelismDegree uint32
 
 	cfg *config.Configuration
@@ -37,7 +40,7 @@ type FrisbeeDHT struct {
 }
 
 // New initializes the Frisbee Node
-func New(selfID peer.NodeID, port uint32, conf *config.Configuration) (*FrisbeeDHT, error) {
+func New(selfID string, port uint32, conf *config.Configuration) (*FrisbeeDHT, error) {
 
 	var cfg *config.Configuration
 
@@ -45,18 +48,20 @@ func New(selfID peer.NodeID, port uint32, conf *config.Configuration) (*FrisbeeD
 		cfg = conf
 	} else {
 		cfg = config.Defaults
+		cfg.Server.Port = port
+	}
+
+	// Hash IP Address and create Identifier
+	id, err := peer.HashKey(selfID)
+	if err != nil {
+		return nil, err
 	}
 
 	dht := &FrisbeeDHT{
-		node:              peer.NewNode(cfg.Server.Addr, port, selfID),
+		node:              peer.NewNode(cfg.Server.Addr, port, id),
 		parallelismDegree: cfg.ParallelismDegree,
 		cfg:               cfg,
 		createdAt:         time.Now(),
-	}
-	// Hash IP Address and create Identifier
-	id, err := kb.HashKey(selfID)
-	if err != nil {
-		return nil, err
 	}
 
 	dht.node.ID = id
@@ -79,6 +84,17 @@ func New(selfID peer.NodeID, port uint32, conf *config.Configuration) (*FrisbeeD
 	// Start service connections
 	go dht.service.Start()
 
+	go func () {
+		ticker := time.NewTicker(cfg.RefreshTimeout)
+
+		for{
+			select {
+				case <-ticker.C:
+					fmt.Printf("New Refresh")
+			}
+		}
+	}()
+
 	logger.Infof("Peer %x just started listening on: %v:%v", dht.node.ID, dht.node.GetHostAddress(), dht.node.GetAddressPort())
 
 	return dht, nil
@@ -97,6 +113,14 @@ func (n *FrisbeeDHT) Join() {
 	6. *Optionally you can perform an iterative_finde_node to get a better idea of the nodes inside the network
 	*/
 
+	bootNode := n.cfg.DefaultBootstrapPeers[0]
+	ctx, _ := context.WithTimeout(context.Background(), 1000 * time.Second)
+	err := n.PingRequest(ctx, fmt.Sprintf("%s:%d", bootNode.Addr, bootNode.Port))
+	if err != nil{
+		logger.Fatalf("Error Pinging Node: %s", err)
+	}
+	n.routingTable.PrintInfo()
+
 }
 
 func (n *FrisbeeDHT) shutdown() error {
@@ -105,7 +129,7 @@ func (n *FrisbeeDHT) shutdown() error {
 
 // RPC Interface Implementation
 // NodeLookup
-func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target kb.ID, addr string, done chan []*proto.Node) {
+func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target peer.NodeID, addr string, done chan []*proto.Node) {
 
 	client, err := n.service.Connect(addr)
 	if err != nil {

@@ -2,12 +2,13 @@ package kbucket
 
 import (
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
+	"fmt"
 	"time"
 )
 
 // RoutingTable used to store a subset of kbucket's of the network.
 type RoutingTable struct {
-	local ID
+	local peer.NodeID
 
 	KBuckets   []*KBucket
 	bucketSize int
@@ -17,7 +18,7 @@ type RoutingTable struct {
 }
 
 // NewRoutingTable is used to create an new empty routing table.
-func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*RoutingTable, error) {
+func NewRoutingTable(bucketsize int, localID peer.NodeID, latency time.Duration) (*RoutingTable, error) {
 
 	rt := &RoutingTable{
 		KBuckets:   []*KBucket{NewBucket()},
@@ -33,7 +34,7 @@ func NewRoutingTable(bucketsize int, localID ID, latency time.Duration) (*Routin
 // Update is used to add a new FrisbeeNode inside the Routing Table
 func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool) (bool, error) {
 
-	bucketID := rt.bucketIdForPeer(node.StringRepr)
+	bucketID := rt.bucketIdForPeer(node.ID)
 	bucket := rt.KBuckets[bucketID]
 
 	now := time.Now()
@@ -43,13 +44,13 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 	}
 
 	// peer already exists in the Routing TAble
-	if peer := bucket.find(node.StringRepr); peer != nil {
+	if c := bucket.find(node.ID); c != nil {
 
-		if peer.LastUsefulAt.IsZero() && queryPeer {
-			peer.LastUsefulAt = lastUsefulAt
+		if c.LastUsefulAt.IsZero() && queryPeer {
+			c.LastUsefulAt = lastUsefulAt
 		}
 
-		bucket.MoveToBack(node.StringRepr)
+		bucket.MoveToBack(node.ID)
 		return true, nil
 	} else {
 		contact := NewContact(node, lastUsefulAt, now, isReplaceable)
@@ -90,14 +91,14 @@ func (rt *RoutingTable) Remove(p peer.NodeID) bool {
 }
 
 // FindClosestPeer used to find the closes node in the network
-func (rt *RoutingTable) FindClosestPeer(targetID ID) Contact {
+func (rt *RoutingTable) FindClosestPeer(targetID peer.NodeID) Contact {
 	return Contact{}
 }
 
 // FindClosestPeers
-func (rt *RoutingTable) FindClosestPeers(id ID, count int) []*Contact {
+func (rt *RoutingTable) FindClosestPeers(id peer.NodeID, count int) []*Contact {
 
-	cpl := CommonPrefixLen(id, rt.local)
+	cpl := peer.CommonPrefixLen(id, rt.local)
 
 	if cpl >= len(rt.KBuckets)-1 {
 		cpl = len(rt.KBuckets) - 1
@@ -137,6 +138,16 @@ func (rt *RoutingTable) FindClosestPeers(id ID, count int) []*Contact {
 // PrinInfo prints a description about this RoutingTable
 func (rt *RoutingTable) PrintInfo() {
 
+	fmt.Printf("Routing Table, bucket size = %d", rt.bucketSize)
+
+	for i, b := range rt.KBuckets {
+		fmt.Printf("\tBucket: %d \n", i)
+
+		for elem := b.List.Front(); elem != nil; elem = elem.Next(){
+			p := elem.Value.(*Contact).Node.ID
+			fmt.Printf("\t\t - %x", p)
+		}
+	}
 }
 
 // Size returns the total number of peers in the routing table
@@ -165,8 +176,7 @@ func (rt *RoutingTable) nextBucket() {
 
 func (rt *RoutingTable) bucketIdForPeer(p peer.NodeID) int {
 
-	peerID, _ := HashKey(p)
-	cpl := CommonPrefixLen(peerID, rt.local)
+	cpl := peer.CommonPrefixLen(p, rt.local)
 
 	bucketId := cpl
 	if bucketId >= len(rt.KBuckets) {

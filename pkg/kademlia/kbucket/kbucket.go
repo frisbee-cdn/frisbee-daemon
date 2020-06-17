@@ -3,13 +3,13 @@ package kbucket
 import (
 	"container/list"
 
-	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
+	id "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 )
 
 // KBucket is a list of routing addresses of other nodes in
 // the network.
 type KBucket struct {
-	*list.List
+	 *list.List
 }
 
 // NewBucket is used to create an empty KBucket
@@ -32,9 +32,9 @@ func (kb *KBucket) GetAllPeers() []Contact {
 
 // find returns the kbucket with the given Id if it exists
 // returns nil if the peerId does not exist in the kBucket
-func (kb *KBucket) find(p peer.NodeID) *Contact {
+func (kb *KBucket) find(p id.NodeID) *Contact {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.StringRepr == p {
+		if elem.Value.(*Contact).Node.ID.Equals(p) {
 			return elem.Value.(*Contact)
 		}
 	}
@@ -43,10 +43,10 @@ func (kb *KBucket) find(p peer.NodeID) *Contact {
 
 // remove deletes the kbucket with the given Id it exists and returns true
 // returns false if the kbucket does not exist in the kBucket
-func (kb *KBucket) remove(p peer.NodeID) bool {
+func (kb *KBucket) remove(p id.NodeID) bool {
 
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.StringRepr == p {
+		if elem.Value.(*Contact).Node.ID.Equals(p) {
 			kb.List.Remove(elem)
 			return true
 		}
@@ -60,18 +60,18 @@ func (kb *KBucket) Len() int {
 }
 
 // MoveToFront
-func (kb *KBucket) MoveToFront(p peer.NodeID) {
+func (kb *KBucket) MoveToFront(p id.NodeID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.StringRepr == p {
+		if elem.Value.(*Contact).Node.ID.Equals(p){
 			kb.List.MoveToFront(elem)
 		}
 	}
 }
 
 // MoveToBack
-func (kb *KBucket) MoveToBack(p peer.NodeID) {
+func (kb *KBucket) MoveToBack(p id.NodeID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.StringRepr == p {
+		if elem.Value.(*Contact).Node.ID.Equals(p) {
 			kb.List.MoveToBack(elem)
 		}
 	}
@@ -89,7 +89,7 @@ func (kb *KBucket) PushBack(p *Contact) {
 
 // Split splits a bucket peers into two buckets
 // TODO: Further examination to understand how it works for Kademlia
-func (kb *KBucket) Split(cpl int, target ID) *KBucket {
+func (kb *KBucket) Split(cpl int, target id.NodeID) *KBucket {
 
 	newBucket := NewBucket()
 
@@ -98,7 +98,7 @@ func (kb *KBucket) Split(cpl int, target ID) *KBucket {
 	for elem != nil {
 
 		pId := elem.Value.(*Contact).Node.ID
-		peerCpl := CommonPrefixLen(pId, target)
+		peerCpl := id.CommonPrefixLen(pId, target)
 		if peerCpl > cpl {
 
 			cur := elem
@@ -114,11 +114,11 @@ func (kb *KBucket) Split(cpl int, target ID) *KBucket {
 	return newBucket
 }
 
-func (kb *KBucket) maxCommonPrefix(target ID) uint {
+func (kb *KBucket) maxCommonPrefix(target id.NodeID) uint {
 
 	maxCpl := uint(0)
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		cpl := uint(CommonPrefixLen(elem.Value.(*Contact).Node.ID, target))
+		cpl := uint(id.CommonPrefixLen(elem.Value.(*Contact).Node.ID, target))
 		if cpl > maxCpl {
 			maxCpl = cpl
 		}

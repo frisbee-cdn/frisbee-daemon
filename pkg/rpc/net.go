@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"fmt"
+	"google.golang.org/grpc/reflection"
 	"net"
 
 	"google.golang.org/grpc"
@@ -42,6 +43,8 @@ func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService, error) 
 // CreateServer
 func (n *NetworkService) Start() {
 
+	// TODO: Rmove reflextion when done with testing
+	reflection.Register(n.server)
 	if err := n.server.Serve(n.sock); err != nil {
 		logger.Fatalf("Failed to serve: %v", err)
 	}
@@ -50,9 +53,9 @@ func (n *NetworkService) Start() {
 // Connect
 func (n *NetworkService) Connect(serverAddr string) (proto.FrisbeeProtocolClient, error) {
 
-	conn, err := grpc.Dial(serverAddr)
+	conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	defer conn.Close()
 
