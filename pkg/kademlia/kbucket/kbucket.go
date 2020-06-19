@@ -9,7 +9,7 @@ import (
 // KBucket is a list of routing addresses of other nodes in
 // the network.
 type KBucket struct {
-	 *list.List
+	*list.List
 }
 
 // NewBucket is used to create an empty KBucket
@@ -62,7 +62,7 @@ func (kb *KBucket) Len() int {
 // MoveToFront
 func (kb *KBucket) MoveToFront(p id.NodeID) {
 	for elem := kb.List.Front(); elem != nil; elem = elem.Next() {
-		if elem.Value.(*Contact).Node.ID.Equals(p){
+		if elem.Value.(*Contact).Node.ID.Equals(p) {
 			kb.List.MoveToFront(elem)
 		}
 	}

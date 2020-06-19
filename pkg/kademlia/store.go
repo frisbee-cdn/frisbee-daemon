@@ -7,12 +7,14 @@ import (
 
 // Store
 func (n *FrisbeeDHT) Store(ctx context.Context, reqBody *proto.StoreRequest) (*proto.Error, error) {
-
-	return nil, nil
+	err := n.datastore.Put(string(reqBody.Key), reqBody.Content)
+	if err != nil {
+		return
+	}
 }
 
 // Store
-func (n *FrisbeeDHT) StoreRequest(ctx context.Context, addr string) {
+func (n *FrisbeeDHT) StoreRequest(ctx context.Context, key string, addr string) {
 
 }
 

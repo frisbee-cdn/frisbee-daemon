@@ -2,8 +2,9 @@ package rpc
 
 import (
 	"fmt"
-	"google.golang.org/grpc/reflection"
 	"net"
+
+	"google.golang.org/grpc/reflection"
 
 	"google.golang.org/grpc"
 
@@ -20,6 +21,13 @@ type NetworkService struct {
 	cfg    config.ServerConfiguration
 	server *grpc.Server
 	sock   *net.TCPListener
+}
+
+// ClientConn represents the open connection of the client
+type ClientConn struct {
+	hostAddr string
+	client   proto.FrisbeeProtocolClient
+	conn     *grpc.ClientConn
 }
 
 // NewNetworkService creates a new service and initializes all server info
@@ -51,20 +59,30 @@ func (n *NetworkService) Start() {
 }
 
 // Connect
-func (n *NetworkService) Connect(serverAddr string) (proto.FrisbeeProtocolClient, error) {
+func (n *NetworkService) Connect(serverAddr string) (*ClientConn, error) {
 
-	conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
+	c, err := grpc.Dial(serverAddr, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
-	defer conn.Close()
 
-	client := proto.NewFrisbeeProtocolClient(conn)
+	clt := proto.NewFrisbeeProtocolClient(c)
 
-	return client, nil
+	cc := &ClientConn{hostAddr: serverAddr, client: clt, conn: c}
+	return cc, nil
 }
 
 // GetServer returns the server
 func (n *NetworkService) GetServer() *grpc.Server {
 	return n.server
+}
+
+// Close is used to shutdown the client connection
+func (c *ClientConn) Close() {
+	c.conn.Close()
+}
+
+// GetClient returns the client
+func (c *ClientConn) GetClient() proto.FrisbeeProtocolClient {
+	return c.client
 }

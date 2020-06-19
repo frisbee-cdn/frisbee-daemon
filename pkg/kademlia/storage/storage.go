@@ -4,6 +4,7 @@ package storage
 // that we can use to manipulate the storage.
 type Storage interface {
 	Get(key string) ([]byte, error)
-	Save(key string, content []byte) error
+	Put(key string, content []byte) error
 	Delete(key string) error
+	Contains(key string) bool
 }

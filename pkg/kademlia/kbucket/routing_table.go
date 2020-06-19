@@ -1,8 +1,8 @@
 package kbucket
 
 import (
-	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	"fmt"
+	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	"time"
 )
 
@@ -43,7 +43,7 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 		lastUsefulAt = now
 	}
 
-	// peer already exists in the Routing TAble
+	// peer already exists in the Routing Table
 	if c := bucket.find(node.ID); c != nil {
 
 		if c.LastUsefulAt.IsZero() && queryPeer {
@@ -58,7 +58,7 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 			bucket.PushBack(contact)
 			return true, nil
 		} else {
-
+			//TODO: Continue Algorithm
 		}
 	}
 	return true, nil
@@ -141,11 +141,11 @@ func (rt *RoutingTable) PrintInfo() {
 	fmt.Printf("Routing Table, bucket size = %d", rt.bucketSize)
 
 	for i, b := range rt.KBuckets {
-		fmt.Printf("\tBucket: %d \n", i)
+		fmt.Printf("\tBucket: %d with %d Contacts \n", i, b.Len())
 
-		for elem := b.List.Front(); elem != nil; elem = elem.Next(){
+		for elem := b.List.Front(); elem != nil; elem = elem.Next() {
 			p := elem.Value.(*Contact).Node.ID
-			fmt.Printf("\t\t - %x", p)
+			fmt.Printf("\t\t - %x\n", p)
 		}
 	}
 }

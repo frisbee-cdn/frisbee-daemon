@@ -15,6 +15,8 @@ import (
 	proto "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
+
+	ds "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/storage"
 )
 
 var logger = log.New()
@@ -24,7 +26,7 @@ type FrisbeeDHT struct {
 	// self node triplet
 	node *peer.Node
 
-	StringRepr     string
+	StringRepr string
 
 	parallelismDegree uint32
 
@@ -37,6 +39,8 @@ type FrisbeeDHT struct {
 	ctx context.Context
 
 	routingTable *kb.RoutingTable
+
+	datastore *ds.MapDatastore
 }
 
 // New initializes the Frisbee Node
@@ -62,6 +66,7 @@ func New(selfID string, port uint32, conf *config.Configuration) (*FrisbeeDHT, e
 		parallelismDegree: cfg.ParallelismDegree,
 		cfg:               cfg,
 		createdAt:         time.Now(),
+		datastore:         ds.NewMapDatastore(),
 	}
 
 	dht.node.ID = id
@@ -84,13 +89,13 @@ func New(selfID string, port uint32, conf *config.Configuration) (*FrisbeeDHT, e
 	// Start service connections
 	go dht.service.Start()
 
-	go func () {
+	go func() {
 		ticker := time.NewTicker(cfg.RefreshTimeout)
 
-		for{
+		for {
 			select {
-				case <-ticker.C:
-					fmt.Printf("New Refresh")
+			case <-ticker.C:
+				fmt.Printf("New Refresh")
 			}
 		}
 	}()
@@ -114,11 +119,26 @@ func (n *FrisbeeDHT) Join() {
 	*/
 
 	bootNode := n.cfg.DefaultBootstrapPeers[0]
-	ctx, _ := context.WithTimeout(context.Background(), 1000 * time.Second)
-	err := n.PingRequest(ctx, fmt.Sprintf("%s:%d", bootNode.Addr, bootNode.Port))
-	if err != nil{
+	//ctx, _ := context.WithTimeout(context.Background(), 1000*time.Second)
+
+	addr := fmt.Sprintf("%s:%d", bootNode.Addr, bootNode.Port)
+	err := n.PingRequest(context.Background(), addr)
+	if err != nil {
 		logger.Fatalf("Error Pinging Node: %s", err)
 	}
+
+	clsPeers, err := n.FindNodeRequest(context.Background(), n.node.ID, addr)
+	if err != nil {
+		logger.Errorf("Error Finding Node: %s", err)
+	}
+
+	for _, p := range clsPeers {
+		err := n.PingRequest(context.Background(), fmt.Sprintf("%s:%d", p.Addr, p.Port))
+		if err != nil {
+			logger.Fatalf("Error Pinging Node: %s", err)
+		}
+	}
+
 	n.routingTable.PrintInfo()
 
 }
@@ -137,7 +157,7 @@ func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target peer.NodeID, addr st
 		return
 	}
 
-	r, err := client.FindNode(ctx, &proto.FindNodeRequest{Id: target})
+	r, err := client.GetClient().FindNode(ctx, &proto.FindNodeRequest{Id: target})
 	if err != nil {
 		done <- nil
 		return

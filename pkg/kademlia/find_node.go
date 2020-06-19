@@ -10,7 +10,7 @@ import (
 func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.FindNodeRequest) (*proto.FindNodeReply, error) {
 
 	senderID := reqBody.Id
-	logger.Info("FindNode Called by sender with ID: %x", senderID)
+	logger.Infof("FindNode Called by sender with ID: %x", senderID)
 	res := make([]*proto.Node, 0, n.cfg.BucketSize)
 	closestPeers := n.routingTable.FindClosestPeers(senderID, n.cfg.BucketSize)
 	for _, p := range closestPeers {
@@ -24,19 +24,22 @@ func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.FindNodeReques
 	return &proto.FindNodeReply{Nodes: res}, nil
 }
 
-// FindNodeRequest
+// FindNodeRequest Client call operation
 func (n *FrisbeeDHT) FindNodeRequest(ctx context.Context, target peer.NodeID, addr string) ([]*proto.Node, error) {
 	client, err := n.service.Connect(addr)
 
 	if err != nil {
 		return nil, err
 	}
+	defer client.Close()
 
-	r, err := client.FindNode(ctx, &proto.FindNodeRequest{Id: target})
+	logger.Infof("Trying to collect closest Peers from Node with address = %s ", addr)
+	r, err := client.GetClient().FindNode(ctx, &proto.FindNodeRequest{Id: target})
 	if err != nil {
 		return nil, err
 	}
 
+	logger.Infof("Succesfully received %d clossest peers", len(r.Nodes))
 	return r.Nodes, nil
 
 }
