@@ -149,22 +149,20 @@ func (n *FrisbeeDHT) shutdown() error {
 
 // RPC Interface Implementation
 // NodeLookup
-func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target peer.NodeID, addr string, done chan []*proto.Node) {
+func (n *FrisbeeDHT) NodeLookup(ctx context.Context, target peer.NodeID, addr string, final chan kb.Contacts) {
 
-	client, err := n.service.Connect(addr)
-	if err != nil {
-		done <- nil
-		return
-	}
+	//done := make(chan kb.Contacts)
+	//out := make(kb.Contacts, n.cfg.BucketSize)
+	//seen := make(map[string]struct{})
+	//
+	//delta := n.cfg.ParallelismDegree
+	//
+	//for _, p := range n.routingTable.FindClosestPeers(target, int(delta)){
+	//	out = append(out, *p)
+	//
+	//}
 
-	r, err := client.GetClient().FindNode(ctx, &proto.FindNodeRequest{Id: target})
-	if err != nil {
-		done <- nil
-		return
-	}
 
-	//TODO: Add Sender ID to routingTable
-	//n.routingTable.ADD(true, false)
 
-	done <- r.Nodes
+
 }

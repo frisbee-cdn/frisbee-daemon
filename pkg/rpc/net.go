@@ -51,7 +51,7 @@ func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService, error) 
 // CreateServer
 func (n *NetworkService) Start() {
 
-	// TODO: Rmove reflextion when done with testing
+	// TODO: Remove reflexion when done with testing
 	reflection.Register(n.server)
 	if err := n.server.Serve(n.sock); err != nil {
 		logger.Fatalf("Failed to serve: %v", err)

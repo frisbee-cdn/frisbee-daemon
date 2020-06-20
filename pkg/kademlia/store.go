@@ -9,12 +9,28 @@ import (
 func (n *FrisbeeDHT) Store(ctx context.Context, reqBody *proto.StoreRequest) (*proto.Error, error) {
 	err := n.datastore.Put(string(reqBody.Key), reqBody.Content)
 	if err != nil {
-		return
+		logger.Errorf("Error adding in datastore: %s", err)
 	}
+	return nil, nil
 }
 
 // Store
-func (n *FrisbeeDHT) StoreRequest(ctx context.Context, key string, addr string) {
+func (n *FrisbeeDHT) StoreRequest(ctx context.Context, key string, value []byte, addr string) error{
+
+	client,err := n.service.Connect(addr)
+	if err != nil{
+		return err
+	}
+	defer client.Close()
+
+	logger.Infof("Store to Key: %s Node with address = %s", key, addr)
+	_, err = client.GetClient().Store(ctx, &proto.StoreRequest{Key: key, Content: value})
+	if err != nil{
+		return err
+	}
+	logger.Info("Successfully stored value in network")
+	return nil
+
 
 }
 

@@ -27,3 +27,6 @@ func NewContact(node *peer.Node, lastUsefulAt time.Time, addedAt time.Time, repl
 		Replaceable:  replaceable,
 	}
 }
+
+// Contacts a list of contacts
+type Contacts []Contact

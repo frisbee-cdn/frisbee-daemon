@@ -27,10 +27,12 @@ message Error {
 
 message FindValueRequest {
     string key = 1;
+    bytes id = 2;
 }
 
 message FindValueReply {
     bytes content = 1;
+    repeated Node nodes = 2;
 }
 
 message FindNodeRequest {

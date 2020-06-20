@@ -88,7 +88,6 @@ func (kb *KBucket) PushBack(p *Contact) {
 }
 
 // Split splits a bucket peers into two buckets
-// TODO: Further examination to understand how it works for Kademlia
 func (kb *KBucket) Split(cpl int, target id.NodeID) *KBucket {
 
 	newBucket := NewBucket()
