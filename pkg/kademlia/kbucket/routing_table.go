@@ -1,10 +1,16 @@
 package kbucket
 
 import (
+	"context"
 	"fmt"
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	"time"
+	net "github/frisbee-cdn/frisbee-daemon/pkg/rpc"
+	proto "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
+	log "github.com/sirupsen/logrus"
 )
+
+var logger = log.New()
 
 // RoutingTable used to store a subset of kbucket's of the network.
 type RoutingTable struct {
@@ -58,7 +64,18 @@ func (rt *RoutingTable) Add(node *peer.Node, queryPeer bool, isReplaceable bool)
 			bucket.PushBack(contact)
 			return true, nil
 		} else {
-			//TODO: Continue Algorithm
+
+			lrs := bucket.GetLeastRecentlySeen()
+			addr := fmt.Sprintf("%s:%d", lrs.Node.GetHostAddress(), lrs.Node.GetAddressPort())
+			if err := rt.probeRequest(context.Background(), addr); err != nil{
+				bucket.MoveToBack(lrs.Node.ID)
+				return true, nil
+			}else{
+				if bucket.remove(lrs.Node.ID){
+					bucket.PushBack(contact)
+					return true,nil
+				}
+			}
 		}
 	}
 	return true, nil
@@ -129,7 +146,11 @@ func (rt *RoutingTable) FindClosestPeers(id peer.NodeID, count int) []*Contact {
 
 	out := make([]*Contact, 0, pds.Len())
 	for _, p := range pds.peers {
-		out = append(out, p.c)
+		if !p.c.Node.ID.Equals(id){
+			out = append(out, p.c)
+		}
+		//out = append(out, p.c)
+
 	}
 
 	return out
@@ -184,4 +205,28 @@ func (rt *RoutingTable) bucketIdForPeer(p peer.NodeID) int {
 	}
 
 	return bucketId
+}
+
+func (rt *RoutingTable)probeRequest(ctx context.Context, addr string) error{
+
+	client, err := net.Connect(addr)
+	if err != nil {
+		return err
+	}
+
+	req := &proto.ProbeRequest{Message: "PING"}
+	logger.Infof("Trying to Probe Peer with address = %s", addr)
+	r, err := client.GetClient().Probe(ctx, req)
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	if r.Status == "" {
+		return err
+	}
+
+	logger.Infof("Received message from Peer: %s", r.Status)
+	return nil
+
 }

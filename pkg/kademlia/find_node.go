@@ -3,6 +3,7 @@ package kademlia
 import (
 	"context"
 	peer "github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
+	net "github/frisbee-cdn/frisbee-daemon/pkg/rpc"
 	proto "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
 )
 
@@ -26,7 +27,7 @@ func (n *FrisbeeDHT) FindNode(ctx context.Context, reqBody *proto.FindNodeReques
 
 // FindNodeRequest Client call operation
 func (n *FrisbeeDHT) FindNodeRequest(ctx context.Context, target peer.NodeID, addr string) ([]*proto.Node, error) {
-	client, err := n.service.Connect(addr)
+	client, err := net.Connect(addr)
 
 	if err != nil {
 		return nil, err

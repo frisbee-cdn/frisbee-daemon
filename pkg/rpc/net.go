@@ -51,7 +51,6 @@ func NewNetworkService(cfg config.ServerConfiguration) (*NetworkService, error) 
 // CreateServer
 func (n *NetworkService) Start() {
 
-	// TODO: Remove reflexion when done with testing
 	reflection.Register(n.server)
 	if err := n.server.Serve(n.sock); err != nil {
 		logger.Fatalf("Failed to serve: %v", err)
@@ -59,7 +58,7 @@ func (n *NetworkService) Start() {
 }
 
 // Connect
-func (n *NetworkService) Connect(serverAddr string) (*ClientConn, error) {
+func Connect(serverAddr string) (*ClientConn, error) {
 
 	c, err := grpc.Dial(serverAddr, grpc.WithInsecure())
 	if err != nil {

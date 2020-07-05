@@ -6,6 +6,7 @@ import (
 
 	"github/frisbee-cdn/frisbee-daemon/pkg/kademlia/common"
 	proto "github/frisbee-cdn/frisbee-daemon/pkg/rpc/proto"
+	net "github/frisbee-cdn/frisbee-daemon/pkg/rpc"
 )
 
 // Ping RPC Abstract Call
@@ -37,8 +38,7 @@ func (n *FrisbeeDHT) Ping(ctx context.Context, reqBody *proto.PingRequest) (*pro
 // Ping
 func (n *FrisbeeDHT) PingRequest(ctx context.Context, addr string) error {
 
-	client, err := n.service.Connect(addr)
-	//print(client)
+	client, err := net.Connect(addr)
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func (n *FrisbeeDHT) PingRequest(ctx context.Context, addr string) error {
 		},
 	}
 
-	logger.Infof("Trying to Ping Node with address = %s", addr)
+	logger.Infof("Trying to Ping Peer with address = %s", addr)
 	r, err := client.GetClient().Ping(ctx, req)
 	if err != nil {
 		return err
@@ -72,3 +72,11 @@ func (n *FrisbeeDHT) PingRequest(ctx context.Context, addr string) error {
 	logger.Infof("Received message from Peer: %s", r.Status)
 	return nil
 }
+
+// Probe
+func (n *FrisbeeDHT)Probe(ctx context.Context, reqBody *proto.ProbeRequest) (*proto.ProbeReply, error){
+
+	return &proto.ProbeReply{Status: "PONG"}, nil
+
+}
+

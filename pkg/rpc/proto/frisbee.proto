@@ -12,6 +12,12 @@ service FrisbeeProtocol {
 
     rpc FindValue(FindValueRequest) returns (FindValueReply) {};
 
+    rpc Probe(ProbeRequest) returns (ProbeReply) {};
+
+    rpc FindValueProxy(FindValueProxyRequest) returns (FindValueProxyReply) {};
+
+    rpc StoreProxy(StoreProxyRequest) returns (Error) {};
+
 }
 
 // Node cotains ID and address
@@ -35,6 +41,20 @@ message FindValueReply {
     repeated Node nodes = 2;
 }
 
+message FindValueProxyRequest{
+    string key = 1;
+}
+
+message FindValueProxyReply{
+    bytes value = 1;
+}
+
+message StoreProxyRequest {
+    string key = 1;
+    bytes content = 2;
+}
+
+
 message FindNodeRequest {
     bytes id = 1;
 }
@@ -56,6 +76,14 @@ message PingReply{
     string status = 1;
     Error error = 2;
     Node recipient = 3;
+}
+
+message ProbeRequest{
+    string message = 1;
+}
+
+message ProbeReply{
+    string status = 1;
 }
 
 message StoreRequest {

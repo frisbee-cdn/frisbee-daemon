@@ -29,4 +29,22 @@ func NewContact(node *peer.Node, lastUsefulAt time.Time, addedAt time.Time, repl
 }
 
 // Contacts a list of contacts
-type Contacts []Contact
+type Contacts []*Contact
+
+//func (c Contacts) Len() int { return len(c) }
+//func (c Contacts) Less(i, j int) bool { return c[i].Node.ID.Less(c[j].Node.ID)}
+//func (c Contacts) Swap(i, j int) { c[i], c[j] = c[j], c[i]}
+//
+//func (c *Contacts) Push(x interface{}) {
+//	*c = append(*c, x.(*Contact))
+//}
+//
+//func (c *Contacts) Pop() interface{} {
+//	oldHeap := *c
+//	oldLen := len(oldHeap)
+//	elem := oldHeap[oldLen - 1]
+//	*c = oldHeap[0 : oldLen - 1]
+//	return elem
+//}
+
+

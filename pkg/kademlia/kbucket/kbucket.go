@@ -87,6 +87,12 @@ func (kb *KBucket) PushBack(p *Contact) {
 	kb.List.PushBack(p)
 }
 
+// GetLeastRecentlySeen returns the least-recently seen contact
+func (kb *KBucket) GetLeastRecentlySeen() *Contact{
+
+	return kb.List.Front().Value.(*Contact)
+}
+
 // Split splits a bucket peers into two buckets
 func (kb *KBucket) Split(cpl int, target id.NodeID) *KBucket {
 

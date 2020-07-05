@@ -3,6 +3,7 @@ package common
 import (
 	"bytes"
 	"crypto/sha1"
+	"encoding/hex"
 	"math/bits"
 )
 
@@ -53,4 +54,8 @@ func ZeroPrefixLen(id []byte) (ret int) {
 
 func CommonPrefixLen(x, y []byte) int {
 	return ZeroPrefixLen(XOR(x, y))
+}
+
+func (id NodeID) String() string{
+	return hex.EncodeToString(id[:])
 }
