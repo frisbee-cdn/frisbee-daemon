@@ -20,8 +20,6 @@ compile-proto:
 	protoc -I=$(PROTO_LOCATION) --go_out=plugins=grpc:$(PROTO_LOCATION) \
 			$(PROTO_LOCATION)/frisbee.proto
 
-test:
-
 test_integration: test
 	go test -tags=integration
 
